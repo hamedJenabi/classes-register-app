@@ -43,6 +43,10 @@ conditional visibility rules, capacity availability, public registration
 submission, dashboard registration review, and focused Node tests for core form
 behavior.
 
+Stripe checkout scaffolding is available at
+`POST /api/payments/stripe/checkout`; Stripe webhooks are handled at
+`POST /api/payments/stripe/webhook`.
+
 This project expects Node `20.19.0` or newer. The app is being developed
 locally first, then prepared for Heroku and Heroku Postgres after the MVP is
 reviewed.
