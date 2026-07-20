@@ -100,3 +100,34 @@
   color: #fff;
   font-weight: 900;
 }
+
+.submitButton:disabled {
+  cursor: wait;
+  opacity: 0.68;
+}
+
+.successMessage,
+.errorMessage {
+  margin: 0;
+  padding: 0.85rem 1rem;
+  border-radius: 8px;
+  line-height: 1.5;
+}
+
+.successMessage {
+  border: 1px solid rgb(138 163 111 / 36%);
+  background: rgb(138 163 111 / 12%);
+  color: var(--color-ink);
+}
+
+.errorMessage {
+  display: grid;
+  gap: 0.3rem;
+  border: 1px solid rgb(143 49 72 / 46%);
+  background: rgb(143 49 72 / 14%);
+  color: var(--color-ink);
+}
+
+.errorMessage p {
+  margin: 0;
+}

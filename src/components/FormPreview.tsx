@@ -40,6 +40,12 @@ function evaluateFieldVisibility(field: FieldBlueprint, values: FormValues) {
 
 export function FormPreview({ form }: FormPreviewProps) {
   const [values, setValues] = useState<FormValues>({});
+  const [submitState, setSubmitState] = useState<
+    | { status: "idle" }
+    | { status: "submitting" }
+    | { status: "success"; message: string }
+    | { status: "error"; errors: string[] }
+  >({ status: "idle" });
 
   const visibleFields = useMemo(
     () => form.fields.filter((field) => evaluateFieldVisibility(field, values)),
@@ -66,8 +72,29 @@ export function FormPreview({ form }: FormPreviewProps) {
   return (
     <form
       className={styles.form}
-      onSubmit={(event) => {
+      onSubmit={async (event) => {
         event.preventDefault();
+
+        setSubmitState({ status: "submitting" });
+
+        const response = await fetch(`/api/forms/${form.slug}/registrations`, {
+          body: JSON.stringify({ answers: values }),
+          headers: {
+            "Content-Type": "application/json",
+          },
+          method: "POST",
+        });
+        const result = (await response.json()) as
+          | { ok: true; message: string }
+          | { ok: false; errors: string[] };
+
+        if (result.ok) {
+          setSubmitState({ status: "success", message: result.message });
+          setValues({});
+          return;
+        }
+
+        setSubmitState({ status: "error", errors: result.errors });
       }}
     >
       <div className={styles.fields}>
@@ -88,8 +115,23 @@ export function FormPreview({ form }: FormPreviewProps) {
         ))}
       </div>
 
-      <button className={styles.submitButton} type="submit">
-        {form.submitButtonLabel}
+      {submitState.status === "success" ? (
+        <p className={styles.successMessage}>{submitState.message}</p>
+      ) : null}
+      {submitState.status === "error" ? (
+        <div className={styles.errorMessage} role="alert">
+          {submitState.errors.map((error) => (
+            <p key={error}>{error}</p>
+          ))}
+        </div>
+      ) : null}
+
+      <button
+        className={styles.submitButton}
+        disabled={submitState.status === "submitting"}
+        type="submit"
+      >
+        {submitState.status === "submitting" ? "Submitting..." : form.submitButtonLabel}
       </button>
     </form>
   );
