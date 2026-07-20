@@ -38,7 +38,7 @@ Latest local commit:
 
 Resume point:
 
-- Next development slice should add Stripe checkout and webhook scaffolding.
+- Next development slice should connect Heroku Postgres and production environment variables.
 
 ## User Stories
 
@@ -150,9 +150,9 @@ Resume point:
 13. Done: Add dashboard registration review.
 14. Done: Add tests for renderer behavior, availability, and submission capacity handling.
 15. Done: Commit the local MVP.
-16. Add Stripe checkout and webhook flow.
-17. Add PayPal order and capture flow.
-18. Prepare Heroku deployment files and documentation.
+16. Done: Add Stripe checkout and webhook flow.
+17. Done: Add PayPal order and capture flow.
+18. Done: Prepare Heroku deployment files and documentation.
 19. Connect Heroku Postgres and production environment variables.
 20. Deploy after local MVP review.
 

@@ -50,6 +50,9 @@ Stripe checkout scaffolding is available at
 PayPal order scaffolding is available at `POST /api/payments/paypal/orders`;
 captures are handled at `POST /api/payments/paypal/orders/{orderId}/capture`.
 
+Heroku deployment notes live in
+[`docs/heroku-deployment.md`](docs/heroku-deployment.md).
+
 This project expects Node `20.19.0` or newer. The app is being developed
 locally first, then prepared for Heroku and Heroku Postgres after the MVP is
 reviewed.
