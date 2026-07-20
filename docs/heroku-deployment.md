@@ -37,7 +37,7 @@ heroku addons:create heroku-postgresql:essential-0
 heroku config:set NEXT_PUBLIC_APP_URL=https://your-app-name.herokuapp.com
 git push heroku main
 heroku run pnpm env:check
-heroku run pnpm prisma:migrate
+heroku run pnpm prisma:migrate:deploy
 heroku run pnpm prisma:seed
 ```
 
@@ -47,7 +47,7 @@ Use the actual branch name instead of `main` if the release branch differs.
 
 ```bash
 git push heroku main
-heroku run pnpm prisma:migrate
+heroku run pnpm prisma:migrate:deploy
 ```
 
 Only run `pnpm prisma:seed` in production when you intentionally want to reset

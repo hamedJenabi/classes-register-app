@@ -156,6 +156,7 @@ Resume point:
 18. Done: Prepare Heroku deployment files and documentation.
 18a. Done: Add admin authentication and separate public form navigation from admin navigation.
 18b. Done: Add production environment preflight for Heroku config vars.
+18c. Done: Add production-safe Prisma migration command for Heroku.
 19. Connect Heroku Postgres and production environment variables.
 20. Deploy after local MVP review.
 

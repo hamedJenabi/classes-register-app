@@ -17,6 +17,7 @@
     "env:check": "node scripts/check-env.mjs",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
+    "prisma:migrate:deploy": "prisma migrate deploy",
     "prisma:seed": "node prisma/seed.mjs",
     "prisma:studio": "prisma studio"
   },

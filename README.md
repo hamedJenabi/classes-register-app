@@ -35,6 +35,7 @@ pnpm typecheck
 pnpm env:check
 pnpm prisma:generate
 pnpm prisma:migrate
+pnpm prisma:migrate:deploy
 pnpm prisma:seed
 pnpm test
 ```
