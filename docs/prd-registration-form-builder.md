@@ -12,6 +12,28 @@ Build a Next.js application with an admin dashboard for creating registration fo
 
 The product will run locally during MVP development and be designed for Heroku deployment with Heroku Postgres later.
 
+## Current Status
+
+Paused after the first development slice on July 20, 2026.
+
+Completed locally:
+
+- Created the Next.js 16 App Router baseline with TypeScript, SCSS Modules, Ariakit, pnpm, linting, and production build scripts.
+- Added Prisma 7 configuration for Postgres using `prisma.config.ts`, `@prisma/adapter-pg`, and generated client output under `src/generated/prisma`.
+- Defined the initial Prisma schema for forms, fields, options, conditional rules, registrations, answers, and payment records.
+- Added the dark Blues Dance Vienna application shell using the supplied screenshot as a brand reference asset.
+- Added a dashboard starter route and public form preview route.
+- Added a sample form blueprint with MVP field types, conditional partner-name visibility, and one capacity-full class option rendered as disabled.
+- Verified `pnpm lint`, `pnpm typecheck`, `pnpm build`, and local HTTP route checks for `/`, `/dashboard`, and `/forms/blues-foundations`.
+
+Latest local commit:
+
+- `edadc3d Scaffold registration builder app`
+
+Resume point:
+
+- Next development slice should create persisted seed data and connect the dashboard/public preview to Prisma-backed form definitions instead of the in-memory sample blueprint.
+
 ## User Stories
 
 1. As an admin, I want to create a new registration form, so that I can register students for a new dance class or event.
@@ -107,15 +129,15 @@ The product will run locally during MVP development and be designed for Heroku d
 
 ## Implementation Steps
 
-1. Scaffold the Next.js app with TypeScript, SCSS, Ariakit, Prisma, linting, and local environment templates.
-2. Add the dark Blues Dance Vienna design system and application shell.
-3. Define the Prisma schema for forms, fields, options, conditional rules, registrations, answers, and payment records.
-4. Add seed data for one sample Blues Dance Vienna registration form.
-5. Build the dashboard form list and form detail routes.
+1. Done: Scaffold the Next.js app with TypeScript, SCSS, Ariakit, Prisma, linting, and local environment templates.
+2. Done: Add the dark Blues Dance Vienna design system and application shell.
+3. Done: Define the Prisma schema for forms, fields, options, conditional rules, registrations, answers, and payment records.
+4. Next: Add seed data for one sample Blues Dance Vienna registration form.
+5. Build the dashboard form list and form detail routes from persisted data.
 6. Build the field editor for MVP field types.
 7. Build option editing with optional capacity.
 8. Build the conditional rule editor.
-9. Build the public form renderer.
+9. Build the public form renderer from persisted form definitions.
 10. Add conditional visibility behavior on the public form.
 11. Add the availability endpoint and disabled full option states.
 12. Add registration submission with server-side validation and capacity re-checking.
