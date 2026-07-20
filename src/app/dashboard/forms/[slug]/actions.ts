@@ -1,13 +1,50 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 import {
   ConditionOperator,
   FieldType as PrismaFieldType,
+  FormStatus,
 } from "@/generated/prisma/enums";
-import type { FieldType as PrismaFieldTypeValue } from "@/generated/prisma/enums";
+import type {
+  FieldType as PrismaFieldTypeValue,
+  FormStatus as FormStatusValue,
+} from "@/generated/prisma/enums";
 import { isFieldType } from "@/lib/field-types";
 import { prisma } from "@/lib/prisma";
+
+export async function updateFormAction(formData: FormData) {
+  const formId = getRequiredString(formData, "formId");
+  const currentSlug = getRequiredString(formData, "currentSlug");
+  const title = getRequiredString(formData, "title");
+  const slug = await getUniqueFormSlug(
+    normalizeSlug(getOptionalString(formData, "slug") ?? title),
+    formId,
+  );
+
+  await prisma.form.update({
+    where: {
+      id: formId,
+    },
+    data: {
+      title,
+      slug,
+      description: getOptionalString(formData, "description"),
+      status: getFormStatus(formData),
+      submitButtonLabel:
+        getOptionalString(formData, "submitButtonLabel") ?? "Register",
+      successMessage: getOptionalString(formData, "successMessage"),
+    },
+  });
+
+  revalidateFormPaths(currentSlug);
+  revalidateFormPaths(slug);
+
+  if (slug !== currentSlug) {
+    redirect(`/dashboard/forms/${slug}`);
+  }
+}
 
 export async function createFieldAction(formData: FormData) {
   const formId = getRequiredString(formData, "formId");
@@ -192,6 +229,20 @@ function revalidateFormPaths(formSlug: string) {
   revalidatePath(`/forms/${formSlug}`);
 }
 
+function getFormStatus(formData: FormData): FormStatusValue {
+  const status = formData.get("status");
+
+  if (
+    status === FormStatus.DRAFT ||
+    status === FormStatus.PUBLISHED ||
+    status === FormStatus.ARCHIVED
+  ) {
+    return status;
+  }
+
+  return FormStatus.DRAFT;
+}
+
 function getConditionOperator(formData: FormData) {
   const operator = formData.get("operator");
 
@@ -262,6 +313,20 @@ function normalizeFieldKey(value: string) {
   return normalizedKey;
 }
 
+function normalizeSlug(value: string) {
+  const normalizedSlug = value
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+
+  if (normalizedSlug.length === 0) {
+    throw new Error("Slug must include at least one letter or number.");
+  }
+
+  return normalizedSlug;
+}
+
 function normalizeOptionValue(value: string) {
   const normalizedValue = value
     .trim()
@@ -274,6 +339,29 @@ function normalizeOptionValue(value: string) {
   }
 
   return normalizedValue;
+}
+
+async function getUniqueFormSlug(slug: string, currentFormId: string) {
+  let candidate = slug;
+  let suffix = 2;
+
+  while (true) {
+    const existingForm = await prisma.form.findUnique({
+      where: {
+        slug: candidate,
+      },
+      select: {
+        id: true,
+      },
+    });
+
+    if (!existingForm || existingForm.id === currentFormId) {
+      return candidate;
+    }
+
+    candidate = `${slug}-${suffix}`;
+    suffix += 1;
+  }
 }
 
 function parseComparisonValue(value: string) {

@@ -15,6 +15,7 @@ type AppShellProps = {
   title: string;
   description: string;
   actions?: AppShellAction[];
+  adminPreviewHref?: string;
   brandHref?: string;
   children: ReactNode;
   surface?: "admin" | "public";
@@ -25,6 +26,7 @@ export function AppShell({
   title,
   description,
   actions = [],
+  adminPreviewHref,
   brandHref = "/",
   children,
   surface = "admin",
@@ -39,7 +41,7 @@ export function AppShell({
         {surface === "admin" ? (
           <div className={styles.navLinks}>
             <Link href="/dashboard">Dashboard</Link>
-            <Link href="/forms/blues-foundations">Preview</Link>
+            {adminPreviewHref ? <Link href={adminPreviewHref}>Preview</Link> : null}
             <Link href="/admin/logout">Sign out</Link>
           </div>
         ) : null}

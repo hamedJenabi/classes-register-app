@@ -1,9 +1,17 @@
 import Link from "next/link";
+import { FormStatus } from "@/generated/prisma/enums";
 import { AppShell } from "@/components/AppShell";
 import { formatFormStatus, getDashboardFormSummaries } from "@/lib/forms";
+import { createFormAction } from "./actions";
 import styles from "./page.module.scss";
 
 export const dynamic = "force-dynamic";
+
+const formStatusOptions = [
+  { label: "Draft", value: FormStatus.DRAFT },
+  { label: "Published", value: FormStatus.PUBLISHED },
+  { label: "Archived", value: FormStatus.ARCHIVED },
+];
 
 export default async function DashboardPage() {
   const forms = await getDashboardFormSummaries();
@@ -19,6 +27,7 @@ export default async function DashboardPage() {
       eyebrow="Dashboard"
       title="Forms"
       description="Draft and published registration forms for classes and events."
+      adminPreviewHref={primaryForm ? `/forms/${primaryForm.slug}` : undefined}
       actions={
         primaryForm ? [{ label: "Preview", href: `/forms/${primaryForm.slug}` }] : []
       }
@@ -33,6 +42,58 @@ export default async function DashboardPage() {
         <p>
           {fieldCount} fields / {capacityOptionCount} capacity options
         </p>
+      </section>
+
+      <section className={styles.builderPanel} aria-label="Create a new form">
+        <div className={styles.sectionHeader}>
+          <div>
+            <span>Form builder</span>
+            <h2>Build a new form</h2>
+          </div>
+          <p>Create the form first, then add fields and class options.</p>
+        </div>
+
+        <form action={createFormAction} className={styles.formBuilder}>
+          <label>
+            Title
+            <input name="title" placeholder="Summer intensive registration" required />
+          </label>
+          <label>
+            Public slug
+            <input name="slug" placeholder="summer-intensive" />
+          </label>
+          <label>
+            Status
+            <select name="status" defaultValue={FormStatus.DRAFT}>
+              {formStatusOptions.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label>
+            Submit button
+            <input name="submitButtonLabel" placeholder="Register" />
+          </label>
+          <label className={styles.wideControl}>
+            Description
+            <textarea
+              name="description"
+              placeholder="Short public description for participants"
+              rows={3}
+            />
+          </label>
+          <label className={styles.wideControl}>
+            Success message
+            <textarea
+              name="successMessage"
+              placeholder="Thanks for registering. We will be in touch soon."
+              rows={3}
+            />
+          </label>
+          <button type="submit">Create form</button>
+        </form>
       </section>
 
       {forms.length > 0 ? (
@@ -64,16 +125,6 @@ export default async function DashboardPage() {
               </div>
             </article>
           ))}
-
-          <article className={styles.panel}>
-            <span>Next</span>
-            <h2>Field editing</h2>
-            <p>
-              The dashboard now reads form definitions from Prisma. The next
-              slice can add mutation routes and editor controls for MVP field
-              types.
-            </p>
-          </article>
         </section>
       ) : (
         <section className={styles.emptyState}>

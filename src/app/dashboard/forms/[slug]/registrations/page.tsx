@@ -26,6 +26,7 @@ export default async function RegistrationsPage({
       eyebrow="Registrations"
       title={form.title}
       description="Submitted participants and their answers."
+      adminPreviewHref={`/forms/${form.slug}`}
       actions={[
         { label: "Form detail", href: `/dashboard/forms/${form.slug}` },
         { label: "Preview", href: `/forms/${form.slug}` },

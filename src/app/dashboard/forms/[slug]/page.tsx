@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { ConditionOperator } from "@/generated/prisma/enums";
+import { ConditionOperator, FormStatus } from "@/generated/prisma/enums";
 import { AppShell } from "@/components/AppShell";
 import { fieldTypeOptions, formatFieldTypeLabel } from "@/lib/field-types";
 import {
@@ -9,6 +9,7 @@ import {
 import {
   createFieldAction,
   createOptionAction,
+  updateFormAction,
   updateConditionalRuleAction,
   updateFieldAction,
   updateOptionAction,
@@ -29,6 +30,12 @@ const conditionOperatorOptions = [
   { label: "Includes", value: ConditionOperator.INCLUDES },
 ];
 
+const formStatusOptions = [
+  { label: "Draft", value: FormStatus.DRAFT },
+  { label: "Published", value: FormStatus.PUBLISHED },
+  { label: "Archived", value: FormStatus.ARCHIVED },
+];
+
 export default async function DashboardFormPage({
   params,
 }: DashboardFormPageProps) {
@@ -44,6 +51,7 @@ export default async function DashboardFormPage({
       eyebrow="Form detail"
       title={form.title}
       description={form.description}
+      adminPreviewHref={`/forms/${form.slug}`}
       actions={[
         { label: "Dashboard", href: "/dashboard" },
         { label: "Registrations", href: `/dashboard/forms/${form.slug}/registrations` },
@@ -67,6 +75,67 @@ export default async function DashboardFormPage({
           <span>Registrations</span>
           <strong>{form.registrationCount}</strong>
         </article>
+      </section>
+
+      <section className={styles.editorPanel} aria-label="Form setup">
+        <div className={styles.sectionHeader}>
+          <div>
+            <span>Form setup</span>
+            <h2>Title, publishing, and confirmation</h2>
+          </div>
+          <p>Public URL: /forms/{form.slug}</p>
+        </div>
+
+        <form action={updateFormAction} className={styles.fieldEditor}>
+          <input name="formId" type="hidden" value={form.id} />
+          <input name="currentSlug" type="hidden" value={form.slug} />
+
+          <label>
+            Title
+            <input name="title" required defaultValue={form.title} />
+          </label>
+          <label>
+            Public slug
+            <input name="slug" required defaultValue={form.slug} />
+          </label>
+          <label>
+            Status
+            <select name="status" defaultValue={form.status}>
+              {formStatusOptions.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label>
+            Submit button
+            <input
+              name="submitButtonLabel"
+              defaultValue={form.submitButtonLabel}
+              placeholder="Register"
+            />
+          </label>
+          <label className={styles.wideControl}>
+            Description
+            <textarea
+              name="description"
+              defaultValue={form.description}
+              placeholder="Short public description for participants"
+              rows={3}
+            />
+          </label>
+          <label className={styles.wideControl}>
+            Success message
+            <textarea
+              name="successMessage"
+              defaultValue={form.successMessage ?? ""}
+              placeholder="Thanks for registering. We will be in touch soon."
+              rows={3}
+            />
+          </label>
+          <button type="submit">Save form</button>
+        </form>
       </section>
 
       <section className={styles.editorPanel} aria-label="Add field">
@@ -129,7 +198,8 @@ export default async function DashboardFormPage({
       </section>
 
       <section className={styles.fields} aria-label="Form fields">
-        {form.fields.map((field, index) => (
+        {form.fields.length > 0 ? (
+          form.fields.map((field, index) => (
           <article className={styles.fieldCard} key={field.key}>
             <div className={styles.fieldHeader}>
               <div>
@@ -341,7 +411,21 @@ export default async function DashboardFormPage({
               </form>
             ) : null}
           </article>
-        ))}
+          ))
+        ) : (
+          <article className={styles.fieldCard}>
+            <div className={styles.fieldHeader}>
+              <div>
+                <span>No fields yet</span>
+                <h2>Start with the field editor above</h2>
+              </div>
+            </div>
+            <p>
+              Add participant details, class choices, consent questions, and any
+              notes you need before sharing the public form link.
+            </p>
+          </article>
+        )}
       </section>
     </AppShell>
   );

@@ -1,182 +1,264 @@
 # Registration Form Builder PRD
 
-## Problem Statement
+Last updated: July 20, 2026
 
-Blues Dance Vienna needs a reusable registration system for dance classes and future events. Today, creating a new registration flow requires too much manual work and does not provide a clean way to define custom questions, conditional fields, class capacity, payment status, or exported registration data.
+## Summary
 
-The first product goal is not to clone a full form-builder platform. The goal is to create a focused generic form builder that can support the recurring registration needs of Blues Dance Vienna while staying simple enough to build, test, and deploy in MVP steps.
+Blues Dance Vienna needs a reusable registration system for classes and future
+events. The product should let an admin define registration forms, publish a
+participant-facing form, manage capacity-sensitive class options, review
+submissions, and connect payment records to Stripe or PayPal.
 
-## Solution
+The current repo contains a strong local MVP. The main product path is built:
+persisted form definitions, public form rendering, field and option editing,
+conditional rules, capacity checks, submission storage, registration review,
+admin authentication, Heroku preparation, and payment API routes. The remaining
+work is mostly production launch, form lifecycle controls, participant-facing
+payment UX, and broader verification.
 
-Build a Next.js application with an admin dashboard for creating registration forms and a public form renderer for participants. Admins can create forms, add fields, configure options, define conditional visibility rules, and mark class options with capacities. Participants fill out a public form; options that are already full are disabled based on backend availability. Submitted data is stored in Postgres and can later be connected to Stripe and PayPal payment flows.
+## Problem
 
-The product will run locally during MVP development and be designed for Heroku deployment with Heroku Postgres later.
+Creating a new class or event registration flow is too manual. The team needs a
+repeatable way to collect participant details, define custom questions, show
+conditional fields, prevent overbooking, track payment status, and review
+registrations without rebuilding one-off forms.
 
-## Current Status
+The goal is not to clone a general-purpose form-builder platform. The goal is a
+focused registration builder that fits recurring Blues Dance Vienna workflows
+and can evolve in small, reliable slices.
 
-Continued after the admin authentication and public/admin separation slice on July 20, 2026.
+## Goals
 
-Completed locally:
+- Let admins create and manage registration forms for classes and events.
+- Let admins configure common field types, labels, helper text, placeholders,
+  required state, sort order, options, and basic conditional visibility.
+- Let admins mark selected options with capacity limits.
+- Let participants submit public forms without seeing admin navigation.
+- Disable full options in the UI and re-check capacity on the server.
+- Store form definitions, answers, registrations, payment records, and provider
+  metadata in Postgres.
+- Prepare the app for Heroku and Heroku Postgres deployment.
+- Keep Stripe and PayPal integrations separate so either provider can be used.
 
-- Created the Next.js 16 App Router baseline with TypeScript, SCSS Modules, Ariakit, pnpm, linting, and production build scripts.
-- Added Prisma 7 configuration for Postgres using `prisma.config.ts`, `@prisma/adapter-pg`, and generated client output under `src/generated/prisma`.
-- Defined the initial Prisma schema for forms, fields, options, conditional rules, registrations, answers, and payment records.
-- Created the initial Prisma migration for the schema.
-- Added the dark Blues Dance Vienna application shell using the supplied screenshot as a brand reference asset.
-- Added a dashboard starter route and public form preview route.
-- Added a sample form blueprint with MVP field types, conditional partner-name visibility, and one capacity-full class option rendered as disabled.
-- Added an idempotent seed script for the Blues Foundations sample form, including capacity-managed options and seeded registrations.
-- Connected the home page, dashboard form list, dashboard form detail route, and public form preview route to Prisma-backed form definitions.
-- Added dashboard field editor controls for creating and updating MVP field metadata: label, key, type, required state, sort order, placeholder, and help text.
-- Added option editing with optional capacity, conditional rule editing, the availability endpoint, registration submission, and dashboard registration review.
-- Added focused Node tests for conditional visibility and capacity calculations.
-- Added password-protected admin access for `/` and `/dashboard/*`, plus separated public form navigation so participants do not see dashboard, login, or logout links.
-- Verified lint, typecheck, tests, production build, seed execution, and local HTTP route checks for `/`, `/dashboard`, `/dashboard/forms/blues-foundations`, and `/forms/blues-foundations`.
+## Non-Goals
 
-Latest local commit:
-
-- `edadc3d Scaffold registration builder app`
-
-Resume point:
-
-- Next development slice should connect Heroku Postgres and production environment variables.
-
-## User Stories
-
-1. As an admin, I want to create a new registration form, so that I can register students for a new dance class or event.
-2. As an admin, I want to edit a form title, description, slug, and status, so that I can prepare drafts before publishing.
-3. As an admin, I want to add text fields, so that I can collect names and short answers.
-4. As an admin, I want to add textarea fields, so that I can collect longer notes.
-5. As an admin, I want to add email fields, so that I can contact registered students.
-6. As an admin, I want to add phone fields, so that I can contact students if needed.
-7. As an admin, I want to add date fields, so that I can collect date-based information.
-8. As an admin, I want to add number fields, so that I can collect numeric information.
-9. As an admin, I want to add single-select fields, so that a student can choose one class option.
-10. As an admin, I want to add multi-select fields, so that a student can choose multiple class options.
-11. As an admin, I want to add checkbox or yes/no fields, so that I can collect consent and simple boolean choices.
-12. As an admin, I want to configure labels, helper text, placeholders, required state, and sort order for fields, so that public forms are understandable and polished.
-13. As an admin, I want to configure option labels and values, so that class choices can be clear to students and stable in the database.
-14. As an admin, I want to set capacity on class options, so that the system can prevent overbooking.
-15. As an admin, I want to leave capacity empty for non-capacity options, so that normal form choices do not behave like classes.
-16. As an admin, I want to define conditional rules for fields, so that a field can appear only when another answer matches the rule.
-17. As an admin, I want a conditional rule to support equals, does not equal, and includes, so that basic show/hide logic covers the first registration flows.
-18. As a participant, I want to see only fields that are relevant to my earlier answers, so that the form feels shorter and clearer.
-19. As a participant, I want unavailable class options to be disabled, so that I do not register for a full class.
-20. As a participant, I want the submit action to re-check capacity on the backend, so that I get a reliable result even if someone else submits at the same time.
-21. As an admin, I want registration answers stored in Postgres, so that data survives deploys and can be reviewed later.
-22. As an admin, I want to view submitted registrations in the dashboard, so that I can manage attendance.
-23. As an admin, I want payment provider records stored separately from registration answers, so that Stripe and PayPal can be connected independently.
-24. As an admin, I want Stripe and PayPal to be separate integrations, so that each can use its own account and environment variables.
-25. As a developer, I want the app to run locally first, so that MVP decisions can be validated before Heroku deployment.
-26. As a developer, I want database migrations to be reliable, so that local and Heroku Postgres schema changes stay in sync.
-
-## Implementation Decisions
-
-- Use Next.js App Router with TypeScript.
-- Use SCSS Modules for component and page styling.
-- Use Ariakit for accessible UI primitives.
-- Use Prisma for schema modeling, migrations, generated database client, and Heroku Postgres compatibility.
-- Prefer Prisma over Ley for this project because the data model will evolve quickly and typed schema access is valuable for a form builder.
-- Use a dark Blues Dance Vienna visual direction based on the supplied screenshot: near-black surfaces, warm amber highlights, high-contrast white typography, and photography-led brand feel.
-- Build a generic form builder, not a one-off dance-class form.
-- Keep MVP field types limited to text, textarea, email, phone, single select, multi select, checkbox/yes-no, date, and number.
-- Keep MVP conditional logic limited to showing a target field when a source field equals, does not equal, or includes a value.
-- Store form definitions separately from registrations.
-- Store answers as structured values so field types can evolve without requiring a new table per form.
-- Store selectable options as first-class records rather than only JSON config, because class options need capacity and availability checks.
-- Add optional capacity to selectable options. An option with capacity behaves as a capacity-managed class option.
-- Compute availability from submitted registrations and selected capacity-managed options.
-- Disable full options in the public form based on a backend availability response.
-- Re-check capacity during submission on the server to prevent overbooking.
-- Store payment records separately from registrations.
-- Stripe and PayPal integrations are out of the first local schema/dashboard MVP but the schema should leave room for both providers.
-- Admin authentication is implemented with environment-configured password and session token gates for admin routes.
-
-## Proposed Data Model
-
-- Form: title, slug, description, status, submit button label, success message, timestamps.
-- Field: form, key, label, help text, placeholder, type, required state, sort order, config.
-- FieldOption: field, label, value, sort order, optional capacity, optional price metadata later.
-- ConditionalRule: target field, source field, operator, comparison value, action.
-- Registration: form, status, submitted timestamp, participant summary fields, payment status.
-- Answer: registration, field, selected option when relevant, structured value.
-- Payment: registration, provider, provider session id, provider payment id, amount, currency, status, raw provider metadata.
-
-## API Contracts
-
-- Admin form list: returns forms with status and summary counts.
-- Admin form detail: returns a form definition with fields, options, and conditional rules.
-- Admin form mutation endpoints: create and update forms, fields, options, and rules.
-- Public form detail: returns only published form definitions needed by participants.
-- Availability endpoint: returns capacity state for capacity-managed options.
-- Submission endpoint: validates required fields, evaluates submitted field values, re-checks option capacity, writes registration and answers, and returns success or capacity errors.
-- Payment endpoints later: create Stripe checkout session, handle Stripe webhook, create PayPal order, capture PayPal order, and store provider-specific payment records.
-
-## Testing Decisions
-
-- Test the form renderer at the behavior level: fields render by type, required validation appears, conditional fields show and hide based on answers, and disabled full options cannot be selected.
-- Test capacity at the API level: availability returns full options, submission rejects a full option, and submission accepts an option with remaining capacity.
-- Test server-side submission behavior rather than only client state, because capacity protection must work without trusting the browser.
-- Test Prisma-backed data access through the highest practical seam available in the app once the first endpoints exist.
-- Keep early tests focused on form definition, conditional visibility, registration submission, and capacity checks.
-- Add payment integration tests later around webhook/order handling once Stripe and PayPal credentials and sandbox flows are introduced.
-
-## Out of Scope
-
+- Full generic survey-builder complexity.
+- Multi-page forms.
 - File uploads.
 - Repeating sections.
-- Multi-page forms.
-- Discount codes.
-- Complex pricing logic.
+- Discount codes or complex pricing logic.
 - Email automation.
-- Export tooling.
-- Production admin authentication in the first local milestone.
-- Stripe and PayPal implementation in the first schema/dashboard milestone.
-- Publishing PRDs to GitHub issues from Codex.
+- Export tooling in the MVP.
+- Public discovery of admin login URLs.
 
-## Implementation Steps
+## Users
 
-1. Done: Scaffold the Next.js app with TypeScript, SCSS, Ariakit, Prisma, linting, and local environment templates.
-2. Done: Add the dark Blues Dance Vienna design system and application shell.
-3. Done: Define the Prisma schema for forms, fields, options, conditional rules, registrations, answers, and payment records.
-4. Done: Add seed data for one sample Blues Dance Vienna registration form.
-5. Done: Build the dashboard form list and form detail routes from persisted data.
-6. Done: Build the field editor for MVP field types.
-7. Done: Build option editing with optional capacity.
-8. Done: Build the conditional rule editor.
-9. Done: Build the public form renderer from persisted form definitions.
-10. Done: Add conditional visibility behavior on the public form.
-11. Done: Add the availability endpoint and disabled full option states.
-12. Done: Add registration submission with server-side validation and capacity re-checking.
-13. Done: Add dashboard registration review.
-14. Done: Add tests for renderer behavior, availability, and submission capacity handling.
-15. Done: Commit the local MVP.
-16. Done: Add Stripe checkout and webhook flow.
-17. Done: Add PayPal order and capture flow.
-18. Done: Prepare Heroku deployment files and documentation.
-18a. Done: Add admin authentication and separate public form navigation from admin navigation.
-18b. Done: Add production environment preflight for Heroku config vars.
-18c. Done: Add production-safe Prisma migration command for Heroku.
-18d. Done: Enable SSL for production Postgres connections.
-18e. Done: Keep the Prisma CLI available for Heroku one-off migration dynos.
-19. Connect Heroku Postgres and production environment variables.
-20. Deploy after local MVP review.
+- Admin: Blues Dance Vienna organizer who configures forms, monitors capacity,
+  reviews registrations, and checks payment status.
+- Participant: Student or event attendee who fills out a public registration
+  form from a shared link.
+- Developer/operator: Person who runs migrations, configures production
+  environment variables, and deploys to Heroku.
 
-## Backend And Deployment Inputs Needed Later
+## Current Implementation Status
 
-- Heroku app name.
-- Heroku Postgres `DATABASE_URL`.
-- Production public URL.
-- Production admin password and long random `ADMIN_SESSION_TOKEN`.
-- Stripe secret key.
-- Stripe publishable key.
-- Stripe webhook secret.
-- Stripe checkout success URL and cancel URL.
-- PayPal client ID.
-- PayPal secret.
-- PayPal environment mode.
-- PayPal webhook or capture handling preference.
+| Area | Status | Notes |
+| --- | --- | --- |
+| Next.js app foundation | Done | App Router, TypeScript, SCSS Modules, Ariakit, pnpm, lint, typecheck, and build scripts exist. |
+| Prisma/Postgres model | Done | Forms, fields, options, conditional rules, registrations, answers, and payments are modeled. |
+| Seed data | Done | Sample Blues Foundations form and seeded registrations are available. |
+| Admin authentication | Done | Dashboard routes are protected by password/session token, with login URL gated by `ADMIN_LOGIN_TOKEN`. |
+| Dashboard form list | Done with polish needed | Lists persisted forms and counts. One dashboard card still contains stale "Next: Field editing" copy. |
+| Dashboard field editor | Done | Admins can add/update field label, key, type, required state, sort order, placeholder, and help text. |
+| Option editor | Done | Admins can add/update select options and optional capacity limits. |
+| Conditional rules | Done | Admins can configure one visibility rule per field with equals, not-equals, and includes. |
+| Public form renderer | Done | Renders persisted forms and separates public navigation from admin navigation. |
+| Public conditional visibility | Done | Client and server both evaluate visible fields from submitted answers. |
+| Availability endpoint | Done | Capacity-managed options expose counts, remaining slots, and full state. |
+| Registration submission | Done | Saves registrations and answers, validates required fields, validates options, and re-checks capacity in a transaction. |
+| Registration review | Done | Dashboard page lists submissions, participant summary, payment status, and answers. |
+| Stripe payment APIs | Partial | Checkout session and webhook handling exist, but no public checkout UX is wired into the registration flow. |
+| PayPal payment APIs | Partial | Order creation and capture exist, but no public checkout UX is wired into the registration flow. |
+| Heroku preparation | Done | Procfile, deployment docs, production env check, migration deploy script, Prisma CLI availability, and production SSL handling exist. |
+| Production deployment | Not done | No Heroku app/Postgres/config/deploy evidence exists in the repo. |
+| Form lifecycle controls | Done | Dashboard can create a brand-new form, then edit title, slug, description, status, submit label, and success message from the form detail page. |
+| End-to-end/API coverage | Partial | Unit tests cover condition evaluation and availability math. Submission, auth, payment, and browser flows need more coverage. |
 
-## Further Notes
+## Functional Requirements
 
-The first production risk is capacity correctness, not visual polish. The UI can disable full classes for a good participant experience, but the backend must remain the source of truth and reject over-capacity submissions. Payments should be added only after registration saving and capacity checks work reliably.
+### Admin Dashboard
+
+- Show all forms with status, field count, capacity option count, and
+  registration count.
+- Open a form detail page from the dashboard.
+- Add and update fields with supported MVP field types.
+- Add and update select options.
+- Add optional capacity to select options.
+- Configure basic visibility rules for fields.
+- Review submitted registrations and their answers.
+- Show payment status alongside registration status.
+- Protect dashboard routes behind admin session authentication.
+
+### Public Registration
+
+- Render only the selected public form by slug.
+- Render supported field types: text, textarea, email, phone, single select,
+  multi select, boolean, date, and number.
+- Show/hide conditional fields based on participant answers.
+- Disable capacity-managed options that are already full.
+- Submit answers to a server endpoint.
+- Validate required visible fields on the server.
+- Reject invalid selected options.
+- Re-check capacity during submission before saving the registration.
+- Store participant name and email summaries when available.
+- Return the form success message after a successful submission.
+
+### Payments
+
+- Store payment records separately from registration answers.
+- Support Stripe checkout session creation for a registration.
+- Support Stripe webhook processing for completed checkout sessions.
+- Support PayPal order creation for a registration.
+- Support PayPal capture and payment-status updates.
+- Keep provider-specific IDs and raw provider metadata for reconciliation.
+- Future step: expose a participant-facing payment handoff after registration
+  when a paid class or event requires payment.
+
+### Deployment And Operations
+
+- Run locally with Postgres and `.env` values.
+- Generate the Prisma client before builds and typechecks.
+- Run migrations locally and with Heroku one-off dynos.
+- Check required production environment variables before launch.
+- Use SSL for production Postgres connections.
+- Deploy to Heroku with Heroku Postgres.
+
+## Data Model
+
+- Form: title, slug, description, status, submit button label, success message,
+  timestamps.
+- Field: form, key, label, help text, placeholder, type, required state, sort
+  order, config.
+- FieldOption: field, label, value, sort order, optional capacity, optional
+  future pricing metadata.
+- ConditionalRule: form, target field, source field, operator, comparison value,
+  action.
+- Registration: form, status, submitted timestamp, participant summary fields,
+  payment status.
+- Answer: registration, field, selected option when relevant, structured value.
+- Payment: registration, provider, provider session ID, provider payment ID,
+  amount, currency, status, raw provider metadata.
+
+## API And Route Surface
+
+- `GET /dashboard`: admin form list.
+- `GET /dashboard/forms/[slug]`: admin form detail and editor controls.
+- `GET /dashboard/forms/[slug]/registrations`: registration review.
+- Server actions under `src/app/dashboard/forms/[slug]/actions.ts`: field,
+  option, and conditional-rule mutations.
+- `GET /forms/[slug]`: public form.
+- `GET /api/forms/[slug]/availability`: capacity availability.
+- `POST /api/forms/[slug]/registrations`: registration submission.
+- `POST /api/payments/stripe/checkout`: Stripe checkout session creation.
+- `POST /api/payments/stripe/webhook`: Stripe webhook handling.
+- `POST /api/payments/paypal/orders`: PayPal order creation.
+- `POST /api/payments/paypal/orders/[orderId]/capture`: PayPal capture.
+
+## Acceptance Criteria
+
+- An admin can log in and open the dashboard.
+- An admin can view the seeded form and update fields, options, capacities, and
+  conditional visibility rules.
+- A participant can open the public form, complete visible fields, and submit a
+  registration.
+- A full capacity-managed option is disabled in the UI.
+- The server rejects a registration that selects a full option.
+- A successful registration appears in the dashboard review page.
+- Stripe and PayPal payment records can be created through their API routes when
+  valid credentials and registration IDs are provided.
+- Production deployment can pass `pnpm env:check`, apply Prisma migrations, and
+  serve the public form and admin dashboard.
+
+## Remaining Work
+
+### P0: Launch Blockers
+
+1. Create or choose the Heroku app.
+2. Attach Heroku Postgres and set the production `DATABASE_URL`.
+3. Set production config vars:
+   `DATABASE_SSL`, `ADMIN_PASSWORD`, `ADMIN_LOGIN_TOKEN`,
+   `ADMIN_SESSION_TOKEN`, `NEXT_PUBLIC_APP_URL`, `STRIPE_SECRET_KEY`,
+   `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`, `STRIPE_WEBHOOK_SECRET`,
+   `PAYPAL_CLIENT_ID`, `PAYPAL_CLIENT_SECRET`, and `PAYPAL_ENVIRONMENT`.
+4. Run `pnpm env:check` in the Heroku environment.
+5. Run `pnpm prisma:migrate:deploy` against Heroku Postgres.
+6. Seed production only if the sample form should exist there.
+7. Deploy the app to Heroku.
+8. Smoke-test production routes: admin login, dashboard, public form, successful
+   registration, capacity rejection, and registration review.
+9. Configure Stripe webhook URL in Stripe and verify webhook delivery.
+10. Verify PayPal sandbox or live order creation and capture.
+
+### P1: Product Gaps Before Repeated Real Use
+
+1. Wire participant-facing payment UX into the public registration flow when a
+   paid class or event requires payment.
+2. Decide how price is configured for a form or option and connect that to the
+   existing `priceCents` and `currency` option fields.
+3. Add clearer server-action error handling for duplicate field keys, duplicate
+   option values, invalid capacities, and failed saves.
+4. Add API/integration tests for registration submission, capacity rejection,
+   admin auth behavior, Stripe webhook handling, and PayPal capture handling.
+5. Add at least one browser-level smoke test for the public registration flow.
+
+### P2: Later Enhancements
+
+1. Registration export.
+2. Registration cancellation or status management from the dashboard.
+3. Waitlist support for full classes.
+4. Email confirmation and admin notification.
+5. More robust payment reconciliation and refund handling.
+6. Additional conditional logic actions or multiple rules per field.
+
+## Open Decisions
+
+- Should production start with only the seeded Blues Foundations form, or should
+  form creation ship before the first production event?
+- Should payment be required immediately after registration, optional, or
+  manually reconciled at first?
+- Should each option carry its own price, or should the form/event define one
+  shared price?
+- Should full classes reject submissions outright or offer a waitlist option?
+- Which registration fields are required by policy before real participants use
+  the system?
+
+## Implementation Checklist
+
+- [x] Scaffold Next.js app with TypeScript, SCSS, Ariakit, Prisma, linting, and
+  local scripts.
+- [x] Add Blues Dance Vienna visual direction and application shell.
+- [x] Define Prisma schema and initial migration.
+- [x] Add sample form seed data.
+- [x] Build Prisma-backed dashboard form list and form detail routes.
+- [x] Build field editor for MVP field types.
+- [x] Build option editing with optional capacity.
+- [x] Build conditional rule editing.
+- [x] Build public form renderer from persisted form definitions.
+- [x] Add conditional visibility behavior.
+- [x] Add availability endpoint and disabled full option states.
+- [x] Add registration submission with server-side validation and capacity
+  re-checking.
+- [x] Add dashboard registration review.
+- [x] Add focused tests for conditional visibility and availability math.
+- [x] Add admin authentication and separate public navigation.
+- [x] Add Stripe checkout and webhook API routes.
+- [x] Add PayPal order and capture API routes.
+- [x] Add Heroku deployment documentation and production env preflight.
+- [x] Add production-safe Prisma migration command and SSL-aware Postgres
+  connection handling.
+- [x] Add form creation and form metadata/status editing.
+- [ ] Connect participant-facing payment UX if payments are required for launch.
+- [ ] Connect Heroku Postgres and production config vars.
+- [ ] Deploy to Heroku.
+- [ ] Smoke-test production.
+- [ ] Expand integration and browser-level test coverage.

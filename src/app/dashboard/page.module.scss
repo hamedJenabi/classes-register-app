@@ -38,9 +38,102 @@
   font-size: 0.86rem;
 }
 
+.builderPanel {
+  display: grid;
+  gap: 1rem;
+  padding: 1rem;
+  border: 1px solid rgb(255 255 255 / 10%);
+  border-radius: 8px;
+  background: rgb(16 18 24 / 82%);
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.sectionHeader span {
+  color: var(--color-amber);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.sectionHeader h2 {
+  margin: 0.3rem 0 0;
+  color: var(--color-ink);
+  font-size: 1.25rem;
+}
+
+.sectionHeader p {
+  margin: 0;
+  color: var(--color-subtle);
+  font-size: 0.92rem;
+}
+
+.formBuilder {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.formBuilder label {
+  display: grid;
+  gap: 0.35rem;
+  color: var(--color-subtle);
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.formBuilder input,
+.formBuilder select,
+.formBuilder textarea {
+  width: 100%;
+  min-height: 2.65rem;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid rgb(255 255 255 / 11%);
+  border-radius: 8px;
+  outline: none;
+  background: rgb(5 7 11 / 72%);
+  color: var(--color-ink);
+}
+
+.formBuilder textarea {
+  resize: vertical;
+}
+
+.formBuilder input:focus,
+.formBuilder select:focus,
+.formBuilder textarea:focus {
+  border-color: var(--color-teal);
+  box-shadow: 0 0 0 3px rgb(75 182 168 / 16%);
+}
+
+.formBuilder button {
+  align-self: end;
+  min-height: 2.65rem;
+  padding: 0 0.9rem;
+  border: 0;
+  border-radius: 8px;
+  background: var(--color-ink);
+  color: #101218;
+  font-weight: 900;
+}
+
+.formBuilder button:hover {
+  background: var(--color-amber);
+}
+
+.wideControl {
+  grid-column: span 2;
+}
+
 .grid {
   display: grid;
-  grid-template-columns: minmax(0, 1.35fr) minmax(18rem, 0.65fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1rem;
   margin-top: 1rem;
 }
@@ -153,7 +246,16 @@
 
 @media (max-width: 860px) {
   .grid,
-  .formCard dl {
+  .formCard dl,
+  .formBuilder {
     grid-template-columns: 1fr;
+  }
+
+  .sectionHeader {
+    flex-direction: column;
+  }
+
+  .wideControl {
+    grid-column: auto;
   }
 }

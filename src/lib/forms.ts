@@ -64,6 +64,7 @@ export type PersistedFieldDefinition = FieldBlueprint & {
 export type PersistedFormDefinition = Omit<FormBlueprint, "fields"> & {
   id: string;
   status: FormStatus;
+  successMessage: string | null;
   registrationCount: number;
   capacityOptionCount: number;
   fields: PersistedFieldDefinition[];
@@ -191,6 +192,7 @@ function toFormBlueprint(
     slug: form.slug,
     description: form.description ?? "",
     submitButtonLabel: form.submitButtonLabel,
+    successMessage: form.successMessage,
     fields: form.fields.map((field) => toFieldBlueprint(field, optionCounts)),
   };
 }
