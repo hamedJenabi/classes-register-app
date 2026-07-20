@@ -151,6 +151,57 @@
   background: var(--color-amber);
 }
 
+.ruleEditor {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr 1fr auto;
+  gap: 0.75rem;
+  align-items: end;
+  padding: 0.75rem;
+  border: 1px solid rgb(75 182 168 / 18%);
+  border-radius: 8px;
+  background: rgb(75 182 168 / 6%);
+}
+
+.ruleEditor label {
+  display: grid;
+  gap: 0.35rem;
+  color: var(--color-subtle);
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.ruleEditor input,
+.ruleEditor select {
+  width: 100%;
+  min-height: 2.45rem;
+  padding: 0.6rem 0.7rem;
+  border: 1px solid rgb(255 255 255 / 11%);
+  border-radius: 8px;
+  outline: none;
+  background: rgb(5 7 11 / 72%);
+  color: var(--color-ink);
+}
+
+.ruleEditor input:focus,
+.ruleEditor select:focus {
+  border-color: var(--color-teal);
+  box-shadow: 0 0 0 3px rgb(75 182 168 / 16%);
+}
+
+.ruleEditor button {
+  min-height: 2.45rem;
+  padding: 0 0.8rem;
+  border: 1px solid rgb(75 182 168 / 32%);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--color-ink);
+  font-weight: 900;
+}
+
+.ruleEditor button:hover {
+  background: rgb(75 182 168 / 14%);
+}
+
 .wideControl {
   grid-column: span 2;
 }
@@ -239,14 +290,16 @@
 
 @media (max-width: 860px) {
   .summary,
-  .fieldEditor {
+  .fieldEditor,
+  .ruleEditor {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
 @media (max-width: 560px) {
   .summary,
-  .fieldEditor {
+  .fieldEditor,
+  .ruleEditor {
     grid-template-columns: 1fr;
   }
 

@@ -52,6 +52,13 @@ export type PersistedFieldDefinition = FieldBlueprint & {
   id: string;
   dbType: PrismaFieldTypeValue;
   sortOrder: number;
+  conditionalRule?: {
+    id: string;
+    sourceFieldId: string;
+    sourceFieldKey: string;
+    operator: PrismaConditionOperatorValue;
+    comparisonValue: string;
+  };
 };
 
 export type PersistedFormDefinition = Omit<FormBlueprint, "fields"> & {
@@ -218,6 +225,9 @@ function toFieldBlueprint(
   optionCounts: Map<string, number>,
 ): PersistedFieldDefinition {
   const visibleWhenRule = field.targetRules[0];
+  const comparisonValue = visibleWhenRule
+    ? normalizeComparisonValue(visibleWhenRule.comparisonValue)
+    : undefined;
 
   return {
     id: field.id,
@@ -241,9 +251,19 @@ function toFieldBlueprint(
       ? {
           sourceFieldKey: visibleWhenRule.sourceField.key,
           operator: conditionOperatorMap[visibleWhenRule.operator],
-          value: normalizeComparisonValue(visibleWhenRule.comparisonValue),
+          value: comparisonValue ?? "",
         }
       : undefined,
+    conditionalRule:
+      visibleWhenRule && comparisonValue !== undefined
+        ? {
+            id: visibleWhenRule.id,
+            sourceFieldId: visibleWhenRule.sourceFieldId,
+            sourceFieldKey: visibleWhenRule.sourceField.key,
+            operator: visibleWhenRule.operator,
+            comparisonValue: String(comparisonValue),
+          }
+        : undefined,
   };
 }
 

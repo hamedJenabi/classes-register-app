@@ -1,7 +1,10 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { FieldType as PrismaFieldType } from "@/generated/prisma/enums";
+import {
+  ConditionOperator,
+  FieldType as PrismaFieldType,
+} from "@/generated/prisma/enums";
 import type { FieldType as PrismaFieldTypeValue } from "@/generated/prisma/enums";
 import { isFieldType } from "@/lib/field-types";
 import { prisma } from "@/lib/prisma";
@@ -126,11 +129,81 @@ export async function updateOptionAction(formData: FormData) {
   revalidateFormPaths(formSlug);
 }
 
+export async function updateConditionalRuleAction(formData: FormData) {
+  const formId = getRequiredString(formData, "formId");
+  const targetFieldId = getRequiredString(formData, "targetFieldId");
+  const formSlug = getRequiredString(formData, "formSlug");
+  const sourceFieldId = getOptionalString(formData, "sourceFieldId");
+
+  if (!sourceFieldId) {
+    await prisma.conditionalRule.deleteMany({
+      where: {
+        formId,
+        targetFieldId,
+      },
+    });
+
+    revalidateFormPaths(formSlug);
+    return;
+  }
+
+  const operator = getConditionOperator(formData);
+  const comparisonValue = parseComparisonValue(
+    getRequiredString(formData, "comparisonValue"),
+  );
+
+  await prisma.conditionalRule.deleteMany({
+    where: {
+      formId,
+      targetFieldId,
+      NOT: {
+        sourceFieldId,
+      },
+    },
+  });
+
+  await prisma.conditionalRule.upsert({
+    where: {
+      id:
+        getOptionalString(formData, "ruleId") ??
+        `missing_rule_${targetFieldId}`,
+    },
+    create: {
+      formId,
+      targetFieldId,
+      sourceFieldId,
+      operator,
+      comparisonValue,
+    },
+    update: {
+      sourceFieldId,
+      operator,
+      comparisonValue,
+    },
+  });
+
+  revalidateFormPaths(formSlug);
+}
+
 function revalidateFormPaths(formSlug: string) {
   revalidatePath("/");
   revalidatePath("/dashboard");
   revalidatePath(`/dashboard/forms/${formSlug}`);
   revalidatePath(`/forms/${formSlug}`);
+}
+
+function getConditionOperator(formData: FormData) {
+  const operator = formData.get("operator");
+
+  if (
+    operator === ConditionOperator.EQUALS ||
+    operator === ConditionOperator.NOT_EQUALS ||
+    operator === ConditionOperator.INCLUDES
+  ) {
+    return operator;
+  }
+
+  return ConditionOperator.EQUALS;
 }
 
 function getFieldType(formData: FormData): PrismaFieldTypeValue {
@@ -201,4 +274,22 @@ function normalizeOptionValue(value: string) {
   }
 
   return normalizedValue;
+}
+
+function parseComparisonValue(value: string) {
+  const trimmedValue = value.trim();
+
+  if (trimmedValue === "true") {
+    return true;
+  }
+
+  if (trimmedValue === "false") {
+    return false;
+  }
+
+  if (trimmedValue !== "" && Number.isFinite(Number(trimmedValue))) {
+    return Number(trimmedValue);
+  }
+
+  return trimmedValue;
 }

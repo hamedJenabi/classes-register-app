@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { ConditionOperator } from "@/generated/prisma/enums";
 import { AppShell } from "@/components/AppShell";
 import { fieldTypeOptions, formatFieldTypeLabel } from "@/lib/field-types";
 import {
@@ -8,6 +9,7 @@ import {
 import {
   createFieldAction,
   createOptionAction,
+  updateConditionalRuleAction,
   updateFieldAction,
   updateOptionAction,
 } from "./actions";
@@ -20,6 +22,12 @@ type DashboardFormPageProps = {
 };
 
 export const dynamic = "force-dynamic";
+
+const conditionOperatorOptions = [
+  { label: "Equals", value: ConditionOperator.EQUALS },
+  { label: "Does not equal", value: ConditionOperator.NOT_EQUALS },
+  { label: "Includes", value: ConditionOperator.INCLUDES },
+];
 
 export default async function DashboardFormPage({
   params,
@@ -198,6 +206,57 @@ export default async function DashboardFormPage({
               </p>
             ) : null}
 
+            <form action={updateConditionalRuleAction} className={styles.ruleEditor}>
+              <input name="formId" type="hidden" value={form.id} />
+              <input name="targetFieldId" type="hidden" value={field.id} />
+              <input name="formSlug" type="hidden" value={form.slug} />
+              <input
+                name="ruleId"
+                type="hidden"
+                value={field.conditionalRule?.id ?? ""}
+              />
+              <label>
+                Show when field
+                <select
+                  name="sourceFieldId"
+                  defaultValue={field.conditionalRule?.sourceFieldId ?? ""}
+                >
+                  <option value="">Always visible</option>
+                  {form.fields
+                    .filter((sourceField) => sourceField.id !== field.id)
+                    .map((sourceField) => (
+                      <option key={sourceField.id} value={sourceField.id}>
+                        {sourceField.label}
+                      </option>
+                    ))}
+                </select>
+              </label>
+              <label>
+                Operator
+                <select
+                  name="operator"
+                  defaultValue={
+                    field.conditionalRule?.operator ?? ConditionOperator.EQUALS
+                  }
+                >
+                  {conditionOperatorOptions.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <label>
+                Value
+                <input
+                  name="comparisonValue"
+                  defaultValue={field.conditionalRule?.comparisonValue ?? ""}
+                  placeholder="true, beginner-tuesday, 2"
+                />
+              </label>
+              <button type="submit">Save rule</button>
+            </form>
+
             {field.options && field.options.length > 0 ? (
               <div className={styles.options}>
                 {field.options.map((option) => (
@@ -258,7 +317,11 @@ export default async function DashboardFormPage({
                 <input name="formSlug" type="hidden" value={form.slug} />
                 <label>
                   Label
-                  <input name="label" placeholder="Beginner blues, Tuesday" required />
+                  <input
+                    name="label"
+                    placeholder="Beginner blues, Tuesday"
+                    required
+                  />
                 </label>
                 <label>
                   Value
