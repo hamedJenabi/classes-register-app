@@ -1,0 +1,115 @@
+.toolbar,
+.registration,
+.emptyState {
+  border: 1px solid rgb(255 255 255 / 10%);
+  border-radius: 8px;
+  background: rgb(16 18 24 / 82%);
+}
+
+.toolbar {
+  padding: 1rem;
+}
+
+.toolbar span,
+.registration header span,
+.emptyState span {
+  color: var(--color-amber);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.list {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.registration {
+  display: grid;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.registration header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.registration h2 {
+  margin: 0.3rem 0 0;
+  color: var(--color-ink);
+  font-size: 1.25rem;
+}
+
+.registration p,
+.emptyState p {
+  margin: 0.25rem 0 0;
+  color: var(--color-muted);
+}
+
+.statusStack {
+  display: grid;
+  justify-items: end;
+  gap: 0.3rem;
+}
+
+.statusStack strong,
+.statusStack small {
+  padding: 0.3rem 0.55rem;
+  border: 1px solid rgb(212 138 85 / 42%);
+  border-radius: 999px;
+  color: var(--color-amber);
+  font-size: 0.82rem;
+}
+
+.statusStack small {
+  border-color: rgb(255 255 255 / 12%);
+  color: var(--color-subtle);
+}
+
+.registration dl {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.65rem;
+  margin: 0;
+}
+
+.registration dl div {
+  min-height: 4.5rem;
+  padding: 0.75rem;
+  border: 1px solid rgb(255 255 255 / 8%);
+  border-radius: 8px;
+  background: rgb(255 255 255 / 4%);
+}
+
+.registration dt {
+  color: var(--color-subtle);
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.registration dd {
+  margin: 0.3rem 0 0;
+  color: var(--color-ink);
+  overflow-wrap: anywhere;
+}
+
+.emptyState {
+  padding: 1rem;
+}
+
+@media (max-width: 720px) {
+  .registration header,
+  .statusStack {
+    align-items: flex-start;
+    justify-items: start;
+    flex-direction: column;
+  }
+
+  .registration dl {
+    grid-template-columns: 1fr;
+  }
+}

@@ -46,6 +46,7 @@ export default async function DashboardFormPage({
       description={form.description}
       actions={[
         { label: "Dashboard", href: "/dashboard" },
+        { label: "Registrations", href: `/dashboard/forms/${form.slug}/registrations` },
         { label: "Preview", href: `/forms/${form.slug}` },
       ]}
     >
