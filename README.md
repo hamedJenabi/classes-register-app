@@ -32,6 +32,7 @@ Useful scripts:
 ```bash
 pnpm lint
 pnpm typecheck
+pnpm env:check
 pnpm prisma:generate
 pnpm prisma:migrate
 pnpm prisma:seed

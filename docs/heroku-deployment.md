@@ -36,6 +36,7 @@ heroku create your-app-name
 heroku addons:create heroku-postgresql:essential-0
 heroku config:set NEXT_PUBLIC_APP_URL=https://your-app-name.herokuapp.com
 git push heroku main
+heroku run pnpm env:check
 heroku run pnpm prisma:migrate
 heroku run pnpm prisma:seed
 ```
@@ -66,4 +67,5 @@ PayPal capture is handled by the app route:
 https://your-app-name.herokuapp.com/api/payments/paypal/orders/{orderId}/capture
 ```
 
-Admin authentication is still required before production use.
+Run `heroku run pnpm env:check` after changing production config vars. It
+verifies required database, admin, Stripe, PayPal, and public URL settings.
