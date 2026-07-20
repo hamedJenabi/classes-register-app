@@ -45,6 +45,9 @@ heroku run pnpm prisma:migrate:deploy
 heroku run pnpm prisma:seed
 ```
 
+The Prisma CLI is installed as a production dependency so Heroku one-off dynos
+can run migrations after dev dependencies are pruned.
+
 Use the actual branch name instead of `main` if the release branch differs.
 
 ## Later Deploys

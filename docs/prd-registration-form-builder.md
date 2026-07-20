@@ -158,6 +158,7 @@ Resume point:
 18b. Done: Add production environment preflight for Heroku config vars.
 18c. Done: Add production-safe Prisma migration command for Heroku.
 18d. Done: Enable SSL for production Postgres connections.
+18e. Done: Keep the Prisma CLI available for Heroku one-off migration dynos.
 19. Connect Heroku Postgres and production environment variables.
 20. Deploy after local MVP review.
 
