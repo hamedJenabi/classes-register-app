@@ -1,17 +1,11 @@
 import { RegistrationStatus } from "@/generated/prisma/enums";
+import {
+  buildOptionAvailability,
+  type OptionAvailability,
+} from "@/lib/availability-rules";
 import { prisma } from "@/lib/prisma";
 
-export type OptionAvailability = {
-  id: string;
-  fieldId: string;
-  fieldKey: string;
-  label: string;
-  value: string;
-  capacity: number;
-  registeredCount: number;
-  remaining: number;
-  full: boolean;
-};
+export type { OptionAvailability };
 
 export async function getFormAvailability(slug: string) {
   const form = await prisma.form.findUnique({
@@ -62,22 +56,17 @@ export async function getFormAvailability(slug: string) {
   return {
     formId: form.id,
     formSlug: form.slug,
-    options: options.map((option): OptionAvailability => {
-      const registeredCount = counts.get(option.id) ?? 0;
-      const remaining = Math.max(option.capacity - registeredCount, 0);
-
-      return {
+    options: options.map((option) =>
+      buildOptionAvailability({
         id: option.id,
         fieldId: option.fieldId,
         fieldKey: option.fieldKey,
         label: option.label,
         value: option.value,
         capacity: option.capacity,
-        registeredCount,
-        remaining,
-        full: remaining <= 0,
-      };
-    }),
+        registeredCount: counts.get(option.id) ?? 0,
+      }),
+    ),
   };
 }
 

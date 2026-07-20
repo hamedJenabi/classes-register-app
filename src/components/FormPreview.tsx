@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState, type ChangeEvent } from "react";
+import { evaluateCondition } from "@/lib/condition-evaluation";
 import {
   type FieldBlueprint,
   type FormBlueprint,
@@ -23,19 +24,7 @@ function evaluateFieldVisibility(field: FieldBlueprint, values: FormValues) {
   const currentValue = values[field.visibleWhen.sourceFieldKey];
   const expectedValue = field.visibleWhen.value;
 
-  if (field.visibleWhen.operator === "equals") {
-    return currentValue === expectedValue;
-  }
-
-  if (field.visibleWhen.operator === "not-equals") {
-    return currentValue !== expectedValue;
-  }
-
-  if (field.visibleWhen.operator === "includes") {
-    return Array.isArray(currentValue) && currentValue.includes(String(expectedValue));
-  }
-
-  return true;
+  return evaluateCondition(field.visibleWhen.operator, currentValue, expectedValue);
 }
 
 export function FormPreview({ form }: FormPreviewProps) {

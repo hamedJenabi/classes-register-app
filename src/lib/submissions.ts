@@ -5,6 +5,7 @@ import {
   RegistrationStatus,
 } from "@/generated/prisma/enums";
 import type { Prisma } from "@/generated/prisma/client";
+import { evaluateCondition } from "@/lib/condition-evaluation";
 import { prisma } from "@/lib/prisma";
 
 type SubmittedValue = string | boolean | string[];
@@ -234,19 +235,11 @@ function isFieldVisible(field: SubmissionField, answers: SubmissionAnswers) {
   const currentValue = answers[rule.sourceField.key];
   const expectedValue = normalizeComparisonValue(rule.comparisonValue);
 
-  if (rule.operator === ConditionOperator.EQUALS) {
-    return currentValue === expectedValue;
-  }
-
-  if (rule.operator === ConditionOperator.NOT_EQUALS) {
-    return currentValue !== expectedValue;
-  }
-
-  if (rule.operator === ConditionOperator.INCLUDES) {
-    return Array.isArray(currentValue) && currentValue.includes(String(expectedValue));
-  }
-
-  return true;
+  return evaluateCondition(
+    toBlueprintOperator(rule.operator),
+    currentValue,
+    expectedValue,
+  );
 }
 
 function isEmptyValue(value: SubmittedValue | undefined) {
@@ -321,6 +314,18 @@ function normalizeComparisonValue(value: unknown): string | boolean | number {
   }
 
   return String(value ?? "");
+}
+
+function toBlueprintOperator(operator: ConditionOperator) {
+  if (operator === ConditionOperator.NOT_EQUALS) {
+    return "not-equals";
+  }
+
+  if (operator === ConditionOperator.INCLUDES) {
+    return "includes";
+  }
+
+  return "equals";
 }
 
 type SubmissionField = {
