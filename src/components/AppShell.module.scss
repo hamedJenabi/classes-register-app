@@ -1,0 +1,144 @@
+.shell {
+  width: min(1180px, calc(100% - 2rem));
+  margin: 0 auto;
+  padding: 1rem 0 3rem;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: 4rem;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--color-ink);
+  text-decoration: none;
+}
+
+.brand span {
+  display: grid;
+  width: 2.5rem;
+  aspect-ratio: 1;
+  place-items: center;
+  border: 1px solid rgb(255 255 255 / 14%);
+  border-radius: 8px;
+  background: linear-gradient(135deg, var(--color-ruby), var(--color-amber));
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 900;
+}
+
+.brand strong {
+  font-size: 1rem;
+}
+
+.navLinks {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.navLinks a {
+  padding: 0.55rem 0.75rem;
+  border-radius: 8px;
+  color: var(--color-muted);
+  font-size: 0.92rem;
+  text-decoration: none;
+}
+
+.navLinks a:hover {
+  background: rgb(255 255 255 / 6%);
+  color: var(--color-ink);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: clamp(2rem, 5vw, 4rem) 0 1.25rem;
+}
+
+.header p {
+  margin: 0 0 0.65rem;
+  color: var(--color-amber);
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.header h1 {
+  max-width: 52rem;
+  margin: 0;
+  color: var(--color-ink);
+  font-size: clamp(2.4rem, 7vw, 5.8rem);
+  line-height: 0.95;
+}
+
+.header span {
+  display: block;
+  max-width: 39rem;
+  margin-top: 0.85rem;
+  color: var(--color-muted);
+  font-size: clamp(1rem, 2vw, 1.15rem);
+  line-height: 1.55;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-content: flex-start;
+  gap: 0.65rem;
+  min-width: 15rem;
+}
+
+.actionButton {
+  min-height: 2.55rem;
+  padding: 0 0.95rem;
+  border: 1px solid rgb(255 255 255 / 12%);
+  border-radius: 8px;
+  background: var(--color-ink);
+  color: #101218;
+  font-weight: 800;
+}
+
+.actionButton:hover {
+  background: var(--color-amber);
+}
+
+.content {
+  display: grid;
+  gap: 1rem;
+}
+
+@media (max-width: 720px) {
+  .shell {
+    width: min(100% - 1rem, 1180px);
+  }
+
+  .nav,
+  .header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .navLinks {
+    width: 100%;
+  }
+
+  .navLinks a {
+    flex: 1;
+    text-align: center;
+  }
+
+  .actions {
+    justify-content: flex-start;
+    min-width: 0;
+  }
+}

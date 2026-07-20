@@ -1,0 +1,188 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum FormStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum FieldType {
+  TEXT
+  TEXTAREA
+  EMAIL
+  PHONE
+  SINGLE_SELECT
+  MULTI_SELECT
+  BOOLEAN
+  DATE
+  NUMBER
+}
+
+enum ConditionOperator {
+  EQUALS
+  NOT_EQUALS
+  INCLUDES
+}
+
+enum ConditionalAction {
+  SHOW
+}
+
+enum RegistrationStatus {
+  SUBMITTED
+  CANCELLED
+}
+
+enum PaymentProvider {
+  STRIPE
+  PAYPAL
+}
+
+enum PaymentStatus {
+  NOT_REQUIRED
+  PENDING
+  PAID
+  FAILED
+  REFUNDED
+}
+
+model Form {
+  id                String         @id @default(cuid())
+  title             String
+  slug              String         @unique
+  description       String?
+  status            FormStatus     @default(DRAFT)
+  submitButtonLabel String         @default("Register")
+  successMessage    String?
+  createdAt         DateTime       @default(now())
+  updatedAt         DateTime       @updatedAt
+
+  fields        Field[]
+  rules         ConditionalRule[]
+  registrations Registration[]
+}
+
+model Field {
+  id          String    @id @default(cuid())
+  formId      String
+  key         String
+  label       String
+  helpText    String?
+  placeholder String?
+  type        FieldType
+  required    Boolean   @default(false)
+  sortOrder   Int       @default(0)
+  config      Json?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  form        Form              @relation(fields: [formId], references: [id], onDelete: Cascade)
+  options     FieldOption[]
+  answers     Answer[]
+  sourceRules ConditionalRule[] @relation("SourceFieldRules")
+  targetRules ConditionalRule[] @relation("TargetFieldRules")
+
+  @@unique([formId, key])
+  @@index([formId, sortOrder])
+}
+
+model FieldOption {
+  id         String   @id @default(cuid())
+  fieldId    String
+  label      String
+  value      String
+  sortOrder  Int      @default(0)
+  capacity   Int?
+  priceCents Int?
+  currency   String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  field   Field    @relation(fields: [fieldId], references: [id], onDelete: Cascade)
+  answers Answer[]
+
+  @@unique([fieldId, value])
+  @@index([fieldId, sortOrder])
+}
+
+model ConditionalRule {
+  id              String              @id @default(cuid())
+  formId          String
+  targetFieldId   String
+  sourceFieldId   String
+  operator        ConditionOperator
+  comparisonValue Json
+  action          ConditionalAction   @default(SHOW)
+  sortOrder       Int                 @default(0)
+  createdAt       DateTime            @default(now())
+  updatedAt       DateTime            @updatedAt
+
+  form        Form  @relation(fields: [formId], references: [id], onDelete: Cascade)
+  sourceField Field @relation("SourceFieldRules", fields: [sourceFieldId], references: [id], onDelete: Cascade)
+  targetField Field @relation("TargetFieldRules", fields: [targetFieldId], references: [id], onDelete: Cascade)
+
+  @@index([formId, targetFieldId])
+  @@index([sourceFieldId])
+}
+
+model Registration {
+  id               String             @id @default(cuid())
+  formId           String
+  status           RegistrationStatus @default(SUBMITTED)
+  submittedAt      DateTime           @default(now())
+  participantName  String?
+  participantEmail String?
+  paymentStatus    PaymentStatus      @default(NOT_REQUIRED)
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+
+  form     Form      @relation(fields: [formId], references: [id], onDelete: Restrict)
+  answers  Answer[]
+  payments Payment[]
+
+  @@index([formId, submittedAt])
+  @@index([participantEmail])
+}
+
+model Answer {
+  id             String @id @default(cuid())
+  registrationId String
+  fieldId        String
+  fieldOptionId  String?
+  value          Json?
+
+  registration Registration @relation(fields: [registrationId], references: [id], onDelete: Cascade)
+  field        Field        @relation(fields: [fieldId], references: [id], onDelete: Restrict)
+  fieldOption  FieldOption? @relation(fields: [fieldOptionId], references: [id], onDelete: SetNull)
+
+  @@index([registrationId])
+  @@index([fieldId])
+  @@index([fieldOptionId])
+}
+
+model Payment {
+  id                String          @id @default(cuid())
+  registrationId    String
+  provider          PaymentProvider
+  providerSessionId String?
+  providerPaymentId String?
+  amountCents       Int
+  currency          String
+  status            PaymentStatus   @default(PENDING)
+  metadata          Json?
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+
+  registration Registration @relation(fields: [registrationId], references: [id], onDelete: Cascade)
+
+  @@index([registrationId])
+  @@index([provider, providerSessionId])
+  @@index([provider, providerPaymentId])
+}

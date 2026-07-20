@@ -1,0 +1,102 @@
+.form {
+  display: grid;
+  gap: 1.25rem;
+  max-width: 48rem;
+  padding: clamp(1rem, 3vw, 1.5rem);
+  border: 1px solid rgb(255 255 255 / 10%);
+  border-radius: 8px;
+  background: rgb(16 18 24 / 86%);
+  box-shadow: var(--shadow-panel);
+}
+
+.fields {
+  display: grid;
+  gap: 1rem;
+}
+
+.field {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.field label {
+  color: var(--color-ink);
+  font-weight: 800;
+}
+
+.field label span {
+  margin-left: 0.25rem;
+  color: var(--color-amber);
+}
+
+.field p {
+  margin: 0;
+  color: var(--color-subtle);
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
+.field input:not([type="radio"]):not([type="checkbox"]),
+.field textarea {
+  width: 100%;
+  min-height: 2.9rem;
+  padding: 0.75rem 0.85rem;
+  border: 1px solid rgb(255 255 255 / 11%);
+  border-radius: 8px;
+  outline: none;
+  background: rgb(5 7 11 / 72%);
+  color: var(--color-ink);
+}
+
+.field textarea {
+  resize: vertical;
+}
+
+.field input:focus,
+.field textarea:focus {
+  border-color: var(--color-teal);
+  box-shadow: 0 0 0 3px rgb(75 182 168 / 16%);
+}
+
+.optionStack {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.option,
+.switch {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 3.25rem;
+  padding: 0.75rem;
+  border: 1px solid rgb(255 255 255 / 10%);
+  border-radius: 8px;
+  background: rgb(255 255 255 / 4%);
+}
+
+.option[data-disabled="true"] {
+  color: var(--color-subtle);
+  opacity: 0.58;
+}
+
+.option span,
+.switch span {
+  flex: 1;
+}
+
+.option small {
+  color: var(--color-amber);
+  font-weight: 800;
+}
+
+.submitButton {
+  justify-self: flex-start;
+  min-height: 3rem;
+  padding: 0 1.15rem;
+  border: 0;
+  border-radius: 8px;
+  background: linear-gradient(135deg, var(--color-amber), var(--color-ruby));
+  color: #fff;
+  font-weight: 900;
+}

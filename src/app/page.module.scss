@@ -1,0 +1,78 @@
+.hero {
+  position: relative;
+  min-height: 20rem;
+  overflow: hidden;
+  border: 1px solid rgb(255 255 255 / 10%);
+  border-radius: 8px;
+  background: #090c11;
+  box-shadow: var(--shadow-panel);
+}
+
+.heroImage {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgb(5 7 11 / 94%) 0%, rgb(5 7 11 / 72%) 36%, rgb(5 7 11 / 18%) 100%),
+    url("/brand/blues-dance-vienna-reference.png");
+  background-position: center;
+  background-size: cover;
+}
+
+.heroCopy {
+  position: relative;
+  display: grid;
+  min-height: 20rem;
+  align-content: center;
+  max-width: 36rem;
+  padding: clamp(1.5rem, 4vw, 4rem);
+}
+
+.heroCopy p {
+  margin: 0 0 0.75rem;
+  color: var(--color-amber);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.heroCopy h2 {
+  margin: 0;
+  color: var(--color-ink);
+  font-size: clamp(2.3rem, 6vw, 5.4rem);
+  line-height: 0.95;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.stat {
+  display: grid;
+  gap: 0.45rem;
+  min-height: 7rem;
+  align-content: center;
+  padding: 1.25rem;
+  border: 1px solid rgb(255 255 255 / 10%);
+  border-radius: 8px;
+  background: rgb(16 18 24 / 80%);
+}
+
+.stat strong {
+  color: var(--color-ink);
+  font-size: 2.3rem;
+}
+
+.stat span {
+  color: var(--color-muted);
+  font-size: 0.95rem;
+}
+
+@media (max-width: 760px) {
+  .stats {
+    grid-template-columns: 1fr;
+  }
+}

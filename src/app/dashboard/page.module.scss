@@ -1,0 +1,105 @@
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem;
+  border: 1px solid rgb(255 255 255 / 10%);
+  border-radius: 8px;
+  background: rgb(16 18 24 / 78%);
+}
+
+.toolbar div {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.toolbar span,
+.formCard span,
+.panel span {
+  color: var(--color-amber);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.toolbar strong {
+  color: var(--color-ink);
+  font-size: 1.15rem;
+}
+
+.toolbar p {
+  margin: 0;
+  padding: 0.35rem 0.65rem;
+  border: 1px solid rgb(212 138 85 / 42%);
+  border-radius: 999px;
+  color: var(--color-amber);
+  font-size: 0.86rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(18rem, 0.65fr);
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.formCard,
+.panel {
+  display: grid;
+  gap: 1.5rem;
+  padding: 1.25rem;
+  border: 1px solid rgb(255 255 255 / 10%);
+  border-radius: 8px;
+  background: rgb(16 18 24 / 82%);
+}
+
+.formCard h2,
+.panel h2 {
+  margin: 0.35rem 0 0;
+  color: var(--color-ink);
+  font-size: 1.6rem;
+}
+
+.formCard p,
+.panel p {
+  margin: 0.5rem 0 0;
+  color: var(--color-muted);
+  line-height: 1.6;
+}
+
+.formCard dl {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin: 0;
+}
+
+.formCard dl div {
+  min-height: 5.5rem;
+  padding: 1rem;
+  border: 1px solid rgb(255 255 255 / 8%);
+  border-radius: 8px;
+  background: rgb(255 255 255 / 4%);
+}
+
+.formCard dt {
+  color: var(--color-subtle);
+  font-size: 0.82rem;
+}
+
+.formCard dd {
+  margin: 0.35rem 0 0;
+  color: var(--color-ink);
+  font-size: 1.25rem;
+  font-weight: 800;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 860px) {
+  .grid,
+  .formCard dl {
+    grid-template-columns: 1fr;
+  }
+}
