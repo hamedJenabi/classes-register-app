@@ -14,7 +14,7 @@ The product will run locally during MVP development and be designed for Heroku d
 
 ## Current Status
 
-Continued after the field editor slice on July 20, 2026.
+Continued after the local MVP checkpoint on July 20, 2026.
 
 Completed locally:
 
@@ -28,7 +28,9 @@ Completed locally:
 - Added an idempotent seed script for the Blues Foundations sample form, including capacity-managed options and seeded registrations.
 - Connected the home page, dashboard form list, dashboard form detail route, and public form preview route to Prisma-backed form definitions.
 - Added dashboard field editor controls for creating and updating MVP field metadata: label, key, type, required state, sort order, placeholder, and help text.
-- Verified lint, typecheck, production build, seed execution, and local HTTP route checks for `/`, `/dashboard`, `/dashboard/forms/blues-foundations`, and `/forms/blues-foundations`.
+- Added option editing with optional capacity, conditional rule editing, the availability endpoint, registration submission, and dashboard registration review.
+- Added focused Node tests for conditional visibility and capacity calculations.
+- Verified lint, typecheck, tests, production build, seed execution, and local HTTP route checks for `/`, `/dashboard`, `/dashboard/forms/blues-foundations`, and `/forms/blues-foundations`.
 
 Latest local commit:
 
@@ -36,7 +38,7 @@ Latest local commit:
 
 Resume point:
 
-- Next development slice should build option editing for single-select and multi-select fields, including optional capacity.
+- Next development slice should add Stripe checkout and webhook scaffolding.
 
 ## User Stories
 
@@ -139,15 +141,15 @@ Resume point:
 4. Done: Add seed data for one sample Blues Dance Vienna registration form.
 5. Done: Build the dashboard form list and form detail routes from persisted data.
 6. Done: Build the field editor for MVP field types.
-7. Build option editing with optional capacity.
-8. Build the conditional rule editor.
+7. Done: Build option editing with optional capacity.
+8. Done: Build the conditional rule editor.
 9. Done: Build the public form renderer from persisted form definitions.
 10. Done: Add conditional visibility behavior on the public form.
-11. Add the availability endpoint and disabled full option states.
-12. Add registration submission with server-side validation and capacity re-checking.
-13. Add dashboard registration review.
-14. Add tests for renderer behavior, availability, and submission capacity handling.
-15. Commit the local MVP.
+11. Done: Add the availability endpoint and disabled full option states.
+12. Done: Add registration submission with server-side validation and capacity re-checking.
+13. Done: Add dashboard registration review.
+14. Done: Add tests for renderer behavior, availability, and submission capacity handling.
+15. Done: Commit the local MVP.
 16. Add Stripe checkout and webhook flow.
 17. Add PayPal order and capture flow.
 18. Prepare Heroku deployment files and documentation.
