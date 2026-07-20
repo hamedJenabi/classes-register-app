@@ -1,0 +1,106 @@
+.page {
+  display: grid;
+  min-height: 100vh;
+  place-items: center;
+  padding: 1rem;
+}
+
+.panel {
+  display: grid;
+  width: min(100%, 26rem);
+  gap: 1.25rem;
+  padding: clamp(1.25rem, 4vw, 2rem);
+  border: 1px solid rgb(255 255 255 / 10%);
+  border-radius: 8px;
+  background: rgb(16 18 24 / 88%);
+  box-shadow: var(--shadow-panel);
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--color-ink);
+}
+
+.brand span {
+  display: grid;
+  width: 2.5rem;
+  aspect-ratio: 1;
+  place-items: center;
+  border: 1px solid rgb(255 255 255 / 14%);
+  border-radius: 8px;
+  background: linear-gradient(135deg, var(--color-ruby), var(--color-amber));
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 900;
+}
+
+.brand strong {
+  font-size: 1rem;
+}
+
+.panel p {
+  margin: 0 0 0.5rem;
+  color: var(--color-amber);
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.panel h1 {
+  margin: 0;
+  color: var(--color-ink);
+  font-size: clamp(2.2rem, 8vw, 4rem);
+  line-height: 0.95;
+}
+
+.error {
+  padding: 0.75rem 0.85rem;
+  border: 1px solid rgb(143 49 72 / 46%);
+  border-radius: 8px;
+  background: rgb(143 49 72 / 14%);
+  color: var(--color-ink) !important;
+  font-size: 0.9rem !important;
+  font-weight: 700 !important;
+  text-transform: none !important;
+}
+
+.form {
+  display: grid;
+  gap: 1rem;
+}
+
+.form label {
+  display: grid;
+  gap: 0.45rem;
+  color: var(--color-subtle);
+  font-size: 0.86rem;
+  font-weight: 800;
+}
+
+.form input {
+  width: 100%;
+  min-height: 2.9rem;
+  padding: 0.75rem 0.85rem;
+  border: 1px solid rgb(255 255 255 / 11%);
+  border-radius: 8px;
+  outline: none;
+  background: rgb(5 7 11 / 72%);
+  color: var(--color-ink);
+}
+
+.form input:focus {
+  border-color: var(--color-teal);
+  box-shadow: 0 0 0 3px rgb(75 182 168 / 16%);
+}
+
+.form button {
+  min-height: 3rem;
+  border: 0;
+  border-radius: 8px;
+  background: linear-gradient(135deg, var(--color-amber), var(--color-ruby));
+  color: #fff;
+  font-weight: 900;
+}

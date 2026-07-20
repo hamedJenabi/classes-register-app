@@ -24,7 +24,7 @@
   font-weight: 800;
 }
 
-.field label span {
+.field > label > span {
   margin-left: 0.25rem;
   color: var(--color-amber);
 }
@@ -48,14 +48,19 @@
   color: var(--color-ink);
 }
 
+.field input::placeholder,
+.field textarea::placeholder {
+  color: rgb(185 178 169 / 72%);
+}
+
 .field textarea {
   resize: vertical;
 }
 
-.field input:focus,
-.field textarea:focus {
+.field input:focus-visible,
+.field textarea:focus-visible {
   border-color: var(--color-teal);
-  box-shadow: 0 0 0 3px rgb(75 182 168 / 16%);
+  box-shadow: 0 0 0 3px rgb(75 182 168 / 22%);
 }
 
 .optionStack {
@@ -68,26 +73,76 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  min-height: 3.25rem;
-  padding: 0.75rem;
-  border: 1px solid rgb(255 255 255 / 10%);
+  min-height: 3.75rem;
+  padding: 0.9rem 1rem;
+  border: 1px solid rgb(255 255 255 / 12%);
   border-radius: 8px;
-  background: rgb(255 255 255 / 4%);
+  background: rgb(255 255 255 / 5%);
+  transition:
+    border-color 160ms ease,
+    background 160ms ease,
+    box-shadow 160ms ease,
+    transform 160ms ease;
 }
 
-.option[data-disabled="true"] {
-  color: var(--color-subtle);
-  opacity: 0.58;
+.option:hover,
+.switch:hover {
+  border-color: rgb(255 255 255 / 22%);
+  background: rgb(255 255 255 / 7%);
+}
+
+.option:has(input:checked),
+.switch:has(input:checked) {
+  border-color: rgb(75 182 168 / 62%);
+  background: rgb(75 182 168 / 12%);
+  box-shadow: inset 0 0 0 1px rgb(75 182 168 / 18%);
+}
+
+.option:has(input:focus-visible),
+.switch:has(input:focus-visible) {
+  border-color: var(--color-teal);
+  box-shadow: 0 0 0 3px rgb(75 182 168 / 24%);
+}
+
+.option[data-disabled="true"],
+.option[data-disabled="true"]:hover {
+  border-color: rgb(255 255 255 / 8%);
+  background: rgb(255 255 255 / 3%);
+  color: var(--color-muted);
+  cursor: not-allowed;
+  opacity: 1;
+}
+
+.option input,
+.switch input {
+  width: 1.1rem;
+  height: 1.1rem;
+  accent-color: var(--color-teal);
 }
 
 .option span,
 .switch span {
   flex: 1;
+  color: var(--color-ink);
+  line-height: 1.35;
+}
+
+.option[data-disabled="true"] span {
+  color: var(--color-muted);
 }
 
 .option small {
-  color: var(--color-amber);
+  padding: 0.2rem 0.45rem;
+  border: 1px solid rgb(255 255 255 / 12%);
+  border-radius: 999px;
+  color: var(--color-muted);
   font-weight: 800;
+  white-space: nowrap;
+}
+
+.option[data-disabled="true"] small {
+  border-color: rgb(143 49 72 / 38%);
+  color: #d7c9c3;
 }
 
 .submitButton {

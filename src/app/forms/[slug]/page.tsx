@@ -24,7 +24,8 @@ export default async function PublicFormPage({ params }: FormPageProps) {
       eyebrow="Public form"
       title={form.title}
       description={form.description}
-      actions={[{ label: "Dashboard", href: "/dashboard" }]}
+      brandHref={`/forms/${form.slug}`}
+      surface="public"
     >
       <FormPreview form={form} />
     </AppShell>

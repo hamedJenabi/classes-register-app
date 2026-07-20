@@ -14,7 +14,7 @@ The product will run locally during MVP development and be designed for Heroku d
 
 ## Current Status
 
-Continued after the local MVP checkpoint on July 20, 2026.
+Continued after the admin authentication and public/admin separation slice on July 20, 2026.
 
 Completed locally:
 
@@ -30,6 +30,7 @@ Completed locally:
 - Added dashboard field editor controls for creating and updating MVP field metadata: label, key, type, required state, sort order, placeholder, and help text.
 - Added option editing with optional capacity, conditional rule editing, the availability endpoint, registration submission, and dashboard registration review.
 - Added focused Node tests for conditional visibility and capacity calculations.
+- Added password-protected admin access for `/` and `/dashboard/*`, plus separated public form navigation so participants do not see dashboard, login, or logout links.
 - Verified lint, typecheck, tests, production build, seed execution, and local HTTP route checks for `/`, `/dashboard`, `/dashboard/forms/blues-foundations`, and `/forms/blues-foundations`.
 
 Latest local commit:
@@ -89,7 +90,7 @@ Resume point:
 - Re-check capacity during submission on the server to prevent overbooking.
 - Store payment records separately from registrations.
 - Stripe and PayPal integrations are out of the first local schema/dashboard MVP but the schema should leave room for both providers.
-- Admin authentication is not part of the first local builder milestone, but it is required before production deployment.
+- Admin authentication is implemented with environment-configured password and session token gates for admin routes.
 
 ## Proposed Data Model
 
@@ -153,6 +154,7 @@ Resume point:
 16. Done: Add Stripe checkout and webhook flow.
 17. Done: Add PayPal order and capture flow.
 18. Done: Prepare Heroku deployment files and documentation.
+18a. Done: Add admin authentication and separate public form navigation from admin navigation.
 19. Connect Heroku Postgres and production environment variables.
 20. Deploy after local MVP review.
 
@@ -161,7 +163,7 @@ Resume point:
 - Heroku app name.
 - Heroku Postgres `DATABASE_URL`.
 - Production public URL.
-- Admin authentication decision.
+- Production admin password and long random `ADMIN_SESSION_TOKEN`.
 - Stripe secret key.
 - Stripe publishable key.
 - Stripe webhook secret.

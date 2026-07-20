@@ -11,6 +11,9 @@ Next.js server rendering.
 
 ```bash
 DATABASE_URL=
+ADMIN_PASSWORD=
+ADMIN_LOGIN_TOKEN=
+ADMIN_SESSION_TOKEN=
 NEXT_PUBLIC_APP_URL=
 STRIPE_SECRET_KEY=
 NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=
@@ -22,6 +25,9 @@ PAYPAL_ENVIRONMENT=sandbox
 
 `NEXT_PUBLIC_APP_URL` should be the production app URL, for example
 `https://your-app-name.herokuapp.com`.
+
+Use hard-to-guess values for `ADMIN_LOGIN_TOKEN` and `ADMIN_SESSION_TOKEN`. The
+public form routes do not show admin navigation or login links.
 
 ## First Deploy
 

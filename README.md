@@ -18,6 +18,8 @@ cp .env.example .env
 ```
 
 Adjust `DATABASE_URL` in `.env` to match your local Postgres role and database.
+Set `ADMIN_PASSWORD`, a hard-to-guess `ADMIN_LOGIN_TOKEN`, and a long random
+`ADMIN_SESSION_TOKEN` before opening the dashboard.
 
 Start the app:
 
@@ -52,6 +54,10 @@ captures are handled at `POST /api/payments/paypal/orders/{orderId}/capture`.
 
 Heroku deployment notes live in
 [`docs/heroku-deployment.md`](docs/heroku-deployment.md).
+
+Admin routes are protected under `/dashboard`. The login page lives at
+`/admin/login/{ADMIN_LOGIN_TOKEN}`; participants only see public form routes
+under `/forms/{slug}`.
 
 This project expects Node `20.19.0` or newer. The app is being developed
 locally first, then prepared for Heroku and Heroku Postgres after the MVP is
