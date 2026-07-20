@@ -121,7 +121,13 @@ function requireDatabaseUrl() {
 }
 
 async function seed() {
-  const pool = new Pool({ connectionString: requireDatabaseUrl() });
+  const connectionString = requireDatabaseUrl();
+  const pool = new Pool({
+    connectionString,
+    ssl: shouldUseDatabaseSsl(connectionString)
+      ? { rejectUnauthorized: false }
+      : undefined,
+  });
   const client = await pool.connect();
 
   try {
@@ -309,3 +315,26 @@ seed().catch((error) => {
   console.error(error);
   process.exitCode = 1;
 });
+
+function shouldUseDatabaseSsl(connectionString) {
+  if (process.env.DATABASE_SSL === "false") {
+    return false;
+  }
+
+  try {
+    const databaseUrl = new URL(connectionString);
+    const sslMode = databaseUrl.searchParams.get("sslmode");
+
+    if (sslMode === "disable") {
+      return false;
+    }
+
+    if (sslMode) {
+      return true;
+    }
+  } catch {
+    return process.env.NODE_ENV === "production";
+  }
+
+  return process.env.DATABASE_SSL === "true" || process.env.NODE_ENV === "production";
+}

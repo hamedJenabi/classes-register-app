@@ -11,6 +11,7 @@ Next.js server rendering.
 
 ```bash
 DATABASE_URL=
+DATABASE_SSL=true
 ADMIN_PASSWORD=
 ADMIN_LOGIN_TOKEN=
 ADMIN_SESSION_TOKEN=
@@ -28,6 +29,9 @@ PAYPAL_ENVIRONMENT=sandbox
 
 Use hard-to-guess values for `ADMIN_LOGIN_TOKEN` and `ADMIN_SESSION_TOKEN`. The
 public form routes do not show admin navigation or login links.
+
+Heroku Postgres requires SSL in production. Keep `DATABASE_SSL=true` on Heroku;
+local development can use `DATABASE_SSL=false`.
 
 ## First Deploy
 
