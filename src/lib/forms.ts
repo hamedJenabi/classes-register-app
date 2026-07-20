@@ -233,6 +233,7 @@ function toFieldBlueprint(
       id: option.id,
       label: option.label,
       value: option.value,
+      sortOrder: option.sortOrder,
       capacity: option.capacity ?? undefined,
       registeredCount: optionCounts.get(option.id) ?? 0,
     })),

@@ -179,26 +179,62 @@
   gap: 0.55rem;
 }
 
-.option {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+.optionEditor {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr 0.45fr 0.55fr auto auto;
+  align-items: end;
   gap: 0.75rem;
-  min-height: 2.75rem;
   padding: 0.65rem 0.75rem;
   border: 1px solid rgb(255 255 255 / 8%);
   border-radius: 8px;
   background: rgb(255 255 255 / 4%);
 }
 
-.option span {
-  color: var(--color-ink);
+.optionEditor label {
+  display: grid;
+  gap: 0.3rem;
+  color: var(--color-subtle);
+  font-size: 0.78rem;
   font-weight: 800;
 }
 
-.option small {
+.optionEditor input {
+  width: 100%;
+  min-height: 2.35rem;
+  padding: 0.55rem 0.65rem;
+  border: 1px solid rgb(255 255 255 / 11%);
+  border-radius: 8px;
+  outline: none;
+  background: rgb(5 7 11 / 72%);
+  color: var(--color-ink);
+}
+
+.optionEditor input:focus {
+  border-color: var(--color-teal);
+  box-shadow: 0 0 0 3px rgb(75 182 168 / 16%);
+}
+
+.optionEditor small {
+  align-self: center;
   color: var(--color-amber);
   font-weight: 800;
+  white-space: nowrap;
+}
+
+.optionEditor button {
+  min-height: 2.35rem;
+  padding: 0 0.75rem;
+  border: 1px solid rgb(255 255 255 / 12%);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--color-ink);
+  font-size: 0.86rem;
+  font-weight: 900;
+}
+
+.optionEditor button:hover {
+  border-color: rgb(212 138 85 / 46%);
+  background: rgb(212 138 85 / 12%);
 }
 
 @media (max-width: 860px) {
@@ -216,12 +252,18 @@
 
   .fieldHeader,
   .sectionHeader,
-  .option {
+  .optionEditor {
     align-items: flex-start;
     flex-direction: column;
   }
 
   .wideControl {
     grid-column: auto;
+  }
+}
+
+@media (max-width: 980px) {
+  .optionEditor {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }

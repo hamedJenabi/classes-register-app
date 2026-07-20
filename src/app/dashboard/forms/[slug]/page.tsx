@@ -5,7 +5,12 @@ import {
   formatFormStatus,
   getPersistedFormDefinition,
 } from "@/lib/forms";
-import { createFieldAction, updateFieldAction } from "./actions";
+import {
+  createFieldAction,
+  createOptionAction,
+  updateFieldAction,
+  updateOptionAction,
+} from "./actions";
 import styles from "./page.module.scss";
 
 type DashboardFormPageProps = {
@@ -196,16 +201,80 @@ export default async function DashboardFormPage({
             {field.options && field.options.length > 0 ? (
               <div className={styles.options}>
                 {field.options.map((option) => (
-                  <div className={styles.option} key={option.id}>
-                    <span>{option.label}</span>
+                  <form
+                    action={updateOptionAction}
+                    className={styles.optionEditor}
+                    key={option.id}
+                  >
+                    <input name="optionId" type="hidden" value={option.id} />
+                    <input name="formSlug" type="hidden" value={form.slug} />
+                    <label>
+                      Label
+                      <input
+                        name="label"
+                        required
+                        defaultValue={option.label}
+                      />
+                    </label>
+                    <label>
+                      Value
+                      <input
+                        name="value"
+                        required
+                        defaultValue={option.value}
+                      />
+                    </label>
+                    <label>
+                      Sort
+                      <input
+                        name="sortOrder"
+                        type="number"
+                        defaultValue={option.sortOrder ?? 0}
+                      />
+                    </label>
+                    <label>
+                      Capacity
+                      <input
+                        name="capacity"
+                        type="number"
+                        min={0}
+                        defaultValue={option.capacity ?? ""}
+                      />
+                    </label>
                     <small>
                       {typeof option.capacity === "number"
                         ? `${option.registeredCount ?? 0}/${option.capacity}`
-                        : option.value}
+                        : "Open"}
                     </small>
-                  </div>
+                    <button type="submit">Save option</button>
+                  </form>
                 ))}
               </div>
+            ) : null}
+
+            {isSelectField(field.dbType) ? (
+              <form action={createOptionAction} className={styles.optionEditor}>
+                <input name="fieldId" type="hidden" value={field.id} />
+                <input name="formSlug" type="hidden" value={form.slug} />
+                <label>
+                  Label
+                  <input name="label" placeholder="Beginner blues, Tuesday" required />
+                </label>
+                <label>
+                  Value
+                  <input name="value" placeholder="beginner-tuesday" />
+                </label>
+                <label>
+                  Sort
+                  <input name="sortOrder" type="number" />
+                </label>
+                <label>
+                  Capacity
+                  <input name="capacity" type="number" min={0} />
+                </label>
+                <small>New option</small>
+                <button type="submit">Add option</button>
+              </form>
             ) : null}
           </article>
         ))}
@@ -216,4 +285,8 @@ export default async function DashboardFormPage({
 
 function formatConditionOperator(operator: string) {
   return operator.replaceAll("-", " ");
+}
+
+function isSelectField(dbType: string) {
+  return dbType === "SINGLE_SELECT" || dbType === "MULTI_SELECT";
 }

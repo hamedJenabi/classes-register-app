@@ -70,6 +70,62 @@ export async function updateFieldAction(formData: FormData) {
   revalidateFormPaths(formSlug);
 }
 
+export async function createOptionAction(formData: FormData) {
+  const fieldId = getRequiredString(formData, "fieldId");
+  const formSlug = getRequiredString(formData, "formSlug");
+  const label = getRequiredString(formData, "label");
+  const value = normalizeOptionValue(
+    getOptionalString(formData, "value") ?? label,
+  );
+
+  const latestOption = await prisma.fieldOption.findFirst({
+    where: {
+      fieldId,
+    },
+    orderBy: {
+      sortOrder: "desc",
+    },
+    select: {
+      sortOrder: true,
+    },
+  });
+
+  await prisma.fieldOption.create({
+    data: {
+      fieldId,
+      label,
+      value,
+      sortOrder:
+        getOptionalNumber(formData, "sortOrder") ??
+        (latestOption ? latestOption.sortOrder + 1 : 0),
+      capacity: getOptionalNumber(formData, "capacity"),
+    },
+  });
+
+  revalidateFormPaths(formSlug);
+}
+
+export async function updateOptionAction(formData: FormData) {
+  const optionId = getRequiredString(formData, "optionId");
+  const formSlug = getRequiredString(formData, "formSlug");
+  const label = getRequiredString(formData, "label");
+  const value = normalizeOptionValue(getRequiredString(formData, "value"));
+
+  await prisma.fieldOption.update({
+    where: {
+      id: optionId,
+    },
+    data: {
+      label,
+      value,
+      sortOrder: getOptionalNumber(formData, "sortOrder") ?? 0,
+      capacity: getOptionalNumber(formData, "capacity"),
+    },
+  });
+
+  revalidateFormPaths(formSlug);
+}
+
 function revalidateFormPaths(formSlug: string) {
   revalidatePath("/");
   revalidatePath("/dashboard");
@@ -131,4 +187,18 @@ function normalizeFieldKey(value: string) {
   }
 
   return normalizedKey;
+}
+
+function normalizeOptionValue(value: string) {
+  const normalizedValue = value
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+
+  if (normalizedValue.length === 0) {
+    throw new Error("Option value must include at least one letter or number.");
+  }
+
+  return normalizedValue;
 }

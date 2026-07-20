@@ -15,6 +15,7 @@ export type FieldOptionBlueprint = {
   id: string;
   label: string;
   value: string;
+  sortOrder?: number;
   capacity?: number;
   registeredCount?: number;
 };
