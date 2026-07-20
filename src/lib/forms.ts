@@ -1,7 +1,6 @@
 import {
   ConditionOperator as PrismaConditionOperator,
   FieldType as PrismaFieldType,
-  RegistrationStatus,
 } from "@/generated/prisma/enums";
 import type {
   ConditionOperator as PrismaConditionOperatorValue,
@@ -14,6 +13,7 @@ import type {
   FieldType,
   FormBlueprint,
 } from "@/lib/form-blueprint";
+import { getOptionSelectionCounts } from "@/lib/availability";
 import { prisma } from "@/lib/prisma";
 
 const fieldTypeMap: Record<PrismaFieldTypeValue, FieldType> = {
@@ -179,32 +179,7 @@ async function getSelectedOptionCounts(form: FormRecord) {
       .map((option) => option.id),
   );
 
-  if (optionIds.length === 0) {
-    return new Map<string, number>();
-  }
-
-  const answerCounts = await prisma.answer.groupBy({
-    by: ["fieldOptionId"],
-    where: {
-      fieldOptionId: {
-        in: optionIds,
-      },
-      registration: {
-        status: RegistrationStatus.SUBMITTED,
-      },
-    },
-    _count: {
-      _all: true,
-    },
-  });
-
-  return new Map(
-    answerCounts.flatMap((answerCount) =>
-      answerCount.fieldOptionId
-        ? [[answerCount.fieldOptionId, answerCount._count._all]]
-        : [],
-    ),
-  );
+  return getOptionSelectionCounts(optionIds);
 }
 
 function toFormBlueprint(
