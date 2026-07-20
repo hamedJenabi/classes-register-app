@@ -1,0 +1,227 @@
+.summary {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.summary article,
+.fieldCard,
+.editorPanel {
+  border: 1px solid rgb(255 255 255 / 10%);
+  border-radius: 8px;
+  background: rgb(16 18 24 / 82%);
+}
+
+.summary article {
+  display: grid;
+  gap: 0.35rem;
+  min-height: 6.25rem;
+  align-content: center;
+  padding: 1rem;
+}
+
+.summary span,
+.fieldHeader span,
+.sectionHeader span {
+  color: var(--color-amber);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.summary strong {
+  color: var(--color-ink);
+  font-size: 1.45rem;
+}
+
+.editorPanel {
+  display: grid;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.sectionHeader h2 {
+  margin: 0.3rem 0 0;
+  color: var(--color-ink);
+  font-size: 1.25rem;
+}
+
+.sectionHeader p {
+  margin: 0;
+  color: var(--color-subtle);
+  font-size: 0.92rem;
+}
+
+.fields {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.fieldCard {
+  display: grid;
+  gap: 0.85rem;
+  padding: 1rem;
+}
+
+.fieldHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.fieldHeader h2 {
+  margin: 0.3rem 0 0;
+  color: var(--color-ink);
+  font-size: 1.2rem;
+}
+
+.fieldHeader strong {
+  padding: 0.3rem 0.55rem;
+  border: 1px solid rgb(212 138 85 / 42%);
+  border-radius: 999px;
+  color: var(--color-amber);
+  font-size: 0.82rem;
+}
+
+.fieldCard p {
+  margin: 0;
+  color: var(--color-muted);
+  line-height: 1.55;
+}
+
+.fieldEditor {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.fieldEditor label {
+  display: grid;
+  gap: 0.35rem;
+  color: var(--color-subtle);
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.fieldEditor input:not([type="checkbox"]),
+.fieldEditor select,
+.fieldEditor textarea {
+  width: 100%;
+  min-height: 2.65rem;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid rgb(255 255 255 / 11%);
+  border-radius: 8px;
+  outline: none;
+  background: rgb(5 7 11 / 72%);
+  color: var(--color-ink);
+}
+
+.fieldEditor textarea {
+  resize: vertical;
+}
+
+.fieldEditor input:focus,
+.fieldEditor select:focus,
+.fieldEditor textarea:focus {
+  border-color: var(--color-teal);
+  box-shadow: 0 0 0 3px rgb(75 182 168 / 16%);
+}
+
+.fieldEditor button {
+  align-self: end;
+  min-height: 2.65rem;
+  padding: 0 0.9rem;
+  border: 0;
+  border-radius: 8px;
+  background: var(--color-ink);
+  color: #101218;
+  font-weight: 900;
+}
+
+.fieldEditor button:hover {
+  background: var(--color-amber);
+}
+
+.wideControl {
+  grid-column: span 2;
+}
+
+.checkboxControl {
+  align-self: end;
+  display: flex !important;
+  min-height: 2.65rem;
+  align-items: center;
+  grid-template-columns: auto 1fr;
+  gap: 0.55rem !important;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid rgb(255 255 255 / 10%);
+  border-radius: 8px;
+  background: rgb(255 255 255 / 4%);
+  color: var(--color-ink) !important;
+}
+
+.meta {
+  color: var(--color-subtle) !important;
+  font-size: 0.92rem;
+}
+
+.options {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  min-height: 2.75rem;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid rgb(255 255 255 / 8%);
+  border-radius: 8px;
+  background: rgb(255 255 255 / 4%);
+}
+
+.option span {
+  color: var(--color-ink);
+  font-weight: 800;
+}
+
+.option small {
+  color: var(--color-amber);
+  font-weight: 800;
+}
+
+@media (max-width: 860px) {
+  .summary,
+  .fieldEditor {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 560px) {
+  .summary,
+  .fieldEditor {
+    grid-template-columns: 1fr;
+  }
+
+  .fieldHeader,
+  .sectionHeader,
+  .option {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .wideControl {
+    grid-column: auto;
+  }
+}

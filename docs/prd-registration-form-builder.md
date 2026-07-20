@@ -14,17 +14,21 @@ The product will run locally during MVP development and be designed for Heroku d
 
 ## Current Status
 
-Paused after the first development slice on July 20, 2026.
+Continued after the field editor slice on July 20, 2026.
 
 Completed locally:
 
 - Created the Next.js 16 App Router baseline with TypeScript, SCSS Modules, Ariakit, pnpm, linting, and production build scripts.
 - Added Prisma 7 configuration for Postgres using `prisma.config.ts`, `@prisma/adapter-pg`, and generated client output under `src/generated/prisma`.
 - Defined the initial Prisma schema for forms, fields, options, conditional rules, registrations, answers, and payment records.
+- Created the initial Prisma migration for the schema.
 - Added the dark Blues Dance Vienna application shell using the supplied screenshot as a brand reference asset.
 - Added a dashboard starter route and public form preview route.
 - Added a sample form blueprint with MVP field types, conditional partner-name visibility, and one capacity-full class option rendered as disabled.
-- Verified `pnpm lint`, `pnpm typecheck`, `pnpm build`, and local HTTP route checks for `/`, `/dashboard`, and `/forms/blues-foundations`.
+- Added an idempotent seed script for the Blues Foundations sample form, including capacity-managed options and seeded registrations.
+- Connected the home page, dashboard form list, dashboard form detail route, and public form preview route to Prisma-backed form definitions.
+- Added dashboard field editor controls for creating and updating MVP field metadata: label, key, type, required state, sort order, placeholder, and help text.
+- Verified lint, typecheck, production build, seed execution, and local HTTP route checks for `/`, `/dashboard`, `/dashboard/forms/blues-foundations`, and `/forms/blues-foundations`.
 
 Latest local commit:
 
@@ -32,7 +36,7 @@ Latest local commit:
 
 Resume point:
 
-- Next development slice should create persisted seed data and connect the dashboard/public preview to Prisma-backed form definitions instead of the in-memory sample blueprint.
+- Next development slice should build option editing for single-select and multi-select fields, including optional capacity.
 
 ## User Stories
 
@@ -132,13 +136,13 @@ Resume point:
 1. Done: Scaffold the Next.js app with TypeScript, SCSS, Ariakit, Prisma, linting, and local environment templates.
 2. Done: Add the dark Blues Dance Vienna design system and application shell.
 3. Done: Define the Prisma schema for forms, fields, options, conditional rules, registrations, answers, and payment records.
-4. Next: Add seed data for one sample Blues Dance Vienna registration form.
-5. Build the dashboard form list and form detail routes from persisted data.
-6. Build the field editor for MVP field types.
+4. Done: Add seed data for one sample Blues Dance Vienna registration form.
+5. Done: Build the dashboard form list and form detail routes from persisted data.
+6. Done: Build the field editor for MVP field types.
 7. Build option editing with optional capacity.
 8. Build the conditional rule editor.
-9. Build the public form renderer from persisted form definitions.
-10. Add conditional visibility behavior on the public form.
+9. Done: Build the public form renderer from persisted form definitions.
+10. Done: Add conditional visibility behavior on the public form.
 11. Add the availability endpoint and disabled full option states.
 12. Add registration submission with server-side validation and capacity re-checking.
 13. Add dashboard registration review.

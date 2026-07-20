@@ -1,6 +1,7 @@
+import { notFound } from "next/navigation";
 import { AppShell } from "@/components/AppShell";
 import { FormPreview } from "@/components/FormPreview";
-import { sampleFormBlueprint } from "@/lib/form-blueprint";
+import { getPersistedFormDefinition } from "@/lib/forms";
 
 type FormPageProps = {
   params: Promise<{
@@ -8,10 +9,15 @@ type FormPageProps = {
   }>;
 };
 
+export const dynamic = "force-dynamic";
+
 export default async function PublicFormPage({ params }: FormPageProps) {
   const { slug } = await params;
-  const form =
-    slug === sampleFormBlueprint.slug ? sampleFormBlueprint : sampleFormBlueprint;
+  const form = await getPersistedFormDefinition(slug);
+
+  if (!form) {
+    notFound();
+  }
 
   return (
     <AppShell

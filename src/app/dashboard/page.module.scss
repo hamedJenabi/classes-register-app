@@ -97,6 +97,60 @@
   overflow-wrap: anywhere;
 }
 
+.cardActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+}
+
+.cardActions a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.35rem;
+  padding: 0 0.8rem;
+  border: 1px solid rgb(255 255 255 / 12%);
+  border-radius: 8px;
+  color: var(--color-ink);
+  font-size: 0.9rem;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.cardActions a:hover {
+  border-color: rgb(212 138 85 / 46%);
+  background: rgb(212 138 85 / 12%);
+}
+
+.emptyState {
+  display: grid;
+  gap: 0.65rem;
+  padding: 1.25rem;
+  border: 1px solid rgb(255 255 255 / 10%);
+  border-radius: 8px;
+  background: rgb(16 18 24 / 82%);
+}
+
+.emptyState span {
+  color: var(--color-amber);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.emptyState h2 {
+  margin: 0;
+  color: var(--color-ink);
+  font-size: 1.6rem;
+}
+
+.emptyState p {
+  max-width: 38rem;
+  margin: 0;
+  color: var(--color-muted);
+  line-height: 1.6;
+}
+
 @media (max-width: 860px) {
   .grid,
   .formCard dl {

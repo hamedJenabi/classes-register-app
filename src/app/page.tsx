@@ -1,13 +1,29 @@
 import { AppShell } from "@/components/AppShell";
+import { getDashboardFormSummaries } from "@/lib/forms";
 import styles from "./page.module.scss";
 
-const stats = [
-  { label: "Draft forms", value: "1" },
-  { label: "Published forms", value: "0" },
-  { label: "Capacity-managed options", value: "2" },
-];
+export const dynamic = "force-dynamic";
 
-export default function Home() {
+export default async function Home() {
+  const forms = await getDashboardFormSummaries();
+  const primaryForm = forms[0];
+  const stats = [
+    {
+      label: "Draft forms",
+      value: String(forms.filter((form) => form.status === "DRAFT").length),
+    },
+    {
+      label: "Published forms",
+      value: String(forms.filter((form) => form.status === "PUBLISHED").length),
+    },
+    {
+      label: "Capacity-managed options",
+      value: String(
+        forms.reduce((total, form) => total + form.capacityOptionCount, 0),
+      ),
+    },
+  ];
+
   return (
     <AppShell
       eyebrow="Blues Dance Vienna"
@@ -15,7 +31,9 @@ export default function Home() {
       description="Local MVP workspace for building reusable class registration forms."
       actions={[
         { label: "Dashboard", href: "/dashboard" },
-        { label: "Preview form", href: "/forms/blues-foundations" },
+        ...(primaryForm
+          ? [{ label: "Preview form", href: `/forms/${primaryForm.slug}` }]
+          : []),
       ]}
     >
       <section className={styles.hero}>

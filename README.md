@@ -17,6 +17,8 @@ Copy the environment template:
 cp .env.example .env
 ```
 
+Adjust `DATABASE_URL` in `.env` to match your local Postgres role and database.
+
 Start the app:
 
 ```bash
@@ -30,6 +32,7 @@ pnpm lint
 pnpm typecheck
 pnpm prisma:generate
 pnpm prisma:migrate
+pnpm prisma:seed
 ```
 
 This project expects Node `20.19.0` or newer. The app is being developed
